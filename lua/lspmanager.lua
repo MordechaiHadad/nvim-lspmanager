@@ -99,7 +99,7 @@ function lspmanager.update(lsp)
     job:new({
         command = "bash",
         cwd = path,
-        args = { "-c", servers[lsp].update_script() },
+        args = { "-c", servers[lsp].update_script() }, --TODO: change how to fetch update scripts dont wanna pollute every lsp with their own copy paste of require npm update script
         on_exit = function(j, return_val)
             if return_val == 69 then
                 print(lsp .. " is up to date")
@@ -107,6 +107,9 @@ function lspmanager.update(lsp)
                 vim.schedule(function ()
                     lspmanager.install(lsp)
                 end)
+
+            elseif return_val == 0 then
+                print("sucksexfully updated " .. lsp) --TODO: refactor this else if stuff makes me feel like yanderedev coding
             end
         end,
     }):start()
