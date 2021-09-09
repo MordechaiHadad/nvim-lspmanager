@@ -62,7 +62,7 @@ function lspmanager.install(lsp)
         args = { "-c", servers[lsp].install_script() },
         on_exit = function(j, return_val)
             if return_val == 0 then
-                print("sucksexfully installed")
+                print("sucksexfully installed " .. lsp)
             end
         end,
     }):start()

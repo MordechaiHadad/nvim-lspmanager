@@ -26,7 +26,6 @@ return vim.tbl_extend("error", config, {
         esac
 
         curl -L -o "omnisharp.zip" https://github.com/OmniSharp/omnisharp-roslyn/releases/download/$version/omnisharp-$platform.zip
-        rm -rf omnisharp
         unzip omnisharp.zip
         rm omnisharp.zip
         chmod +x run
