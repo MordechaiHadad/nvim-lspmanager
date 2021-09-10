@@ -3,12 +3,14 @@ local lspmanager = {}
 local job = require("plenary.job")
 local servers = require("lspmanager/servers")
 local configs = require("lspconfig/configs")
+local vscode_lsps = {'cssls', 'html', 'jsonls'}
 
 function lspmanager.setup()
     vim.cmd([[
     command! -nargs=1 -complete=customlist,v:lua.available_servers LspInstall lua require('lspmanager').install('<args>')
     command! -nargs=1 -complete=customlist,v:lua.installed_servers LspUninstall lua require('lspmanager').uninstall('<args>')
     command! -nargs=1 -complete=customlist,v:lua.installed_servers LspUpdate lua require('lspmanager').update('<args>')
+    command! -nargs=0  LspHi lua require('lspmanager').test()
     ]])
     for lang, server_config in pairs(servers) do
         if is_lsp_installed(lang) == 1 and not configs[lang] then
@@ -23,8 +25,14 @@ function lspmanager.setup()
     setup_servers()
 end
 
-function get_path(lang)
-    return vim.fn.stdpath("data") .. "/lspmanager/" .. lang
+function get_path(lsp)
+    for _, value in pairs(vscode_lsps) do
+        if lsp == value then
+            return vim.fn.stdpath("data") .. "/lspmanager/vscode_lsps"
+        end
+    end
+
+    return vim.fn.stdpath("data") .. "/lspmanager/" .. lsp
 end
 
 function is_lsp_installed(lang)

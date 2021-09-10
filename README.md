@@ -9,3 +9,5 @@ use {'MordechaiHadad/nvim-lspmanager', requires = {'neovim/nvim-lspconfig', 'nvi
     require('lspmanager').setup()
 end}
 ```
+
+### Now supports vscode Language servers, please do not attempt to use them yet. they are wacked for some reason out of my control
