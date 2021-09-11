@@ -19,4 +19,17 @@ function utilities.get_config(name)
 	return vim.deepcopy(config)
 end
 
+function utilities.get_path(lsp)
+
+    local vscode_lsps = {'cssls', 'html', 'jsonls'}
+
+    for _, value in pairs(vscode_lsps) do
+        if lsp == value then
+            return vim.fn.stdpath("data") .. "/lspmanager/vscode_lsps"
+        end
+    end
+
+    return vim.fn.stdpath("data") .. "/lspmanager/" .. lsp
+end
+
 return utilities
