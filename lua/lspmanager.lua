@@ -11,7 +11,6 @@ function lspmanager.setup()
     command! -nargs=1 -complete=customlist,v:lua.installed_servers LspUninstall lua require('lspmanager').uninstall('<args>')
     command! -nargs=1 -complete=customlist,v:lua.installed_servers LspUpdate lua require('lspmanager').update('<args>')
     command! -nargs=1 -complete=customlist,v:lua.installed_servers LspHi lua require('lspmanager').test('<args>')
-    autocmd BufNewFile,BufRead *.fs,*.fsx,*.fsi set filetype=fsharp
     ]])
     for lang, server_config in pairs(servers) do
         if is_lsp_installed(lang) == 1 and not configs[lang] then
