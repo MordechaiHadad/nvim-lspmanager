@@ -9,3 +9,4 @@ use {'MordechaiHadad/nvim-lspmanager', requires = {'neovim/nvim-lspconfig', 'nvi
     require('lspmanager').setup()
 end}
 ```
+### As usual f# lsp really doesnt like to work so dont even try to us

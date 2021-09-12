@@ -11,20 +11,22 @@ function lspmanager.setup()
     command! -nargs=1 -complete=customlist,v:lua.installed_servers LspUninstall lua require('lspmanager').uninstall('<args>')
     command! -nargs=1 -complete=customlist,v:lua.installed_servers LspUpdate lua require('lspmanager').update('<args>')
     command! -nargs=1 -complete=customlist,v:lua.installed_servers LspHi lua require('lspmanager').test('<args>')
+    autocmd BufNewFile,BufRead *.fs,*.fsx,*.fsi set filetype=fsharp
     ]])
     for lang, server_config in pairs(servers) do
         if is_lsp_installed(lang) == 1 and not configs[lang] then
             local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = utilities.get_path(lang) } })
             if config.default_config.cmd then
                 local executable = config.default_config.cmd[1]
-                config.default_config.cmd[1] = utilities.get_path(lang) .. "/" .. executable
+                if vim.regex([[\.\/]]):match_str(executable) then
+                    config.default_config.cmd[1] = utilities.get_path(lang) .. "/" .. executable
+                end
             end
             configs[lang] = config
         end
     end
     setup_servers()
 end
-
 
 function is_lsp_installed(lang)
     return vim.fn.isdirectory(utilities.get_path(lang))
@@ -101,9 +103,6 @@ function lspmanager.update(lsp)
 end
 
 function lspmanager.test(lsp)
-    if utilities.is_vscode_lsp(lsp) then
-        vim.notify(vim.inspect(servers[lsp]))
-    end
 end
 
 return lspmanager

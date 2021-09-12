@@ -1,6 +1,6 @@
 local npm = {}
 
-function npm.install_script(args)
+function npm.install_script(args) -- TODO: Change it from string to a table
     return [[
     ! test -f package.json && npm init -y --scope=lspmanager || true
     npm install ]] .. args
