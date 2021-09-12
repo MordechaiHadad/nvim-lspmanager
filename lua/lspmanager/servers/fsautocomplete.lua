@@ -14,6 +14,8 @@ return vim.tbl_extend('error', config, {
     install_script = install_script,
 
     update_script = function ()
-        return [[]]
+        return [[
+        dotnet tool update fsautocomplete
+        ]]
     end
 })

@@ -2,6 +2,7 @@ local jobs = {}
 
 local job = require("plenary.job")
 local servers = require("lspmanager.servers")
+local utilities = require("lspmanager.utilities")
 
 function jobs.installation_job(lsp, path, is_update)
     job:new({
@@ -18,6 +19,12 @@ function jobs.installation_job(lsp, path, is_update)
             else
                 if exitcode == 0 then
                     print("Successfully installed " .. lsp)
+
+                    vim.schedule(function ()
+                        setup_servers()
+
+                        vim.cmd("bufdo e")
+                    end)
                 else
                     print("Failed to install " .. lsp)
                 end
