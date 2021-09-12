@@ -9,3 +9,4 @@ use {'MordechaiHadad/nvim-lspmanager', requires = {'neovim/nvim-lspconfig', 'nvi
     require('lspmanager').setup()
 end}
 ```
+### Added gdscript support, which u do not need to install or update cuz it comes bundled with godot itself

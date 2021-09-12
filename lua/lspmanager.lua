@@ -14,7 +14,11 @@ function lspmanager.setup()
     ]])
     for lang, server_config in pairs(servers) do
         if is_lsp_installed(lang) == 1 and not configs[lang] then
-            local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = utilities.get_path(lang) } })
+            local config = vim.tbl_deep_extend(
+                "keep",
+                server_config,
+                { default_config = { cmd_cwd = utilities.get_path(lang) } }
+            )
             if config.default_config.cmd then
                 local executable = config.default_config.cmd[1]
                 if vim.regex([[\.\/]]):match_str(executable) then
@@ -45,17 +49,18 @@ function setup_servers()
     local installed_servers = installed_servers()
     for _, server in pairs(installed_servers) do
         if utilities.is_vscode_lsp(server) then
-
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-            require("lspconfig")[server].setup{
-                capabilities = capabilities
-            }
+            require("lspconfig")[server].setup({
+                capabilities = capabilities,
+            })
         else
             require("lspconfig")[server].setup({})
         end
     end
+
+    require("lspconfig").gdscript.setup({})
 end
 
 function lspmanager.install(lsp)
@@ -87,7 +92,6 @@ function lspmanager.uninstall(lsp)
 end
 
 function lspmanager.update(lsp)
-
     if not servers[lsp] then
         error("Could not find LSP " .. lsp)
     end
@@ -101,7 +105,6 @@ function lspmanager.update(lsp)
     jobs.update_job(lsp, path)
 end
 
-function lspmanager.test(lsp)
-end
+function lspmanager.test(lsp) end
 
 return lspmanager

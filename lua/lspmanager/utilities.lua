@@ -28,7 +28,7 @@ function utilities.get_path(lsp)
 end
 
 function utilities.is_vscode_lsp(lsp)
-    local vscode_lsps = {'cssls', 'html', 'jsonls'}
+    local vscode_lsps = { "cssls", "html", "jsonls" }
 
     for _, value in ipairs(vscode_lsps) do
         if lsp == value then
