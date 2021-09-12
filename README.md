@@ -1,6 +1,7 @@
-Experimental lspmanager for neovim
+# Nvim-lspmanager
 
-Big thanks to [lspinstall](https://github.com/kabouzeid/nvim-lspinstall)  for helping me save time for some scripts
+Nvim-lspmanager is a powerful and extensible manager for LSPs (Language Server Protocols).
+Using already create configurations from [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig), you can be sure that your lsp will work without having to write a single line of code it.
 
 ## Installation
 
@@ -8,15 +9,9 @@ Big thanks to [lspinstall](https://github.com/kabouzeid/nvim-lspinstall)  for he
 use {
     'MordechaiHadad/nvim-lspmanager',
     requires = {'neovim/nvim-lspconfig', 'nvim-lua/plenary.nvim'},
-    branch = "dev",
     config = function()
         require('lspmanager').setup()
-        require("configs.lsp")
     end,
-    requires = {
-        "neovim/nvim-lspconfig",
-        "ray-x/lsp_signature.nvim",
-    }
 }
 ```
 
@@ -45,3 +40,6 @@ use {
 | :white_check_mark: | Tailwindcss | `tailwindcssls` |
 | :white_check_mark: | Vuejs | `vuels` |
 
+## Credits
+
+- Big thanks to [lspinstall](https://github.com/kabouzeid/nvim-lspinstall)  for helping me save time for some scripts
