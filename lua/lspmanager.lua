@@ -56,6 +56,8 @@ function setup_servers()
             require("lspconfig")[server].setup({})
         end
     end
+
+    require'lspconfig'.gdscript.setup{}
 end
 
 function lspmanager.install(lsp)
