@@ -8,8 +8,8 @@ local utilities = require("lspmanager.utilities") -- TODO: learn how to declare 
 function lspmanager.setup()
     vim.cmd([[
     command! -nargs=1 -complete=customlist,v:lua.available_servers LspInstall lua require('lspmanager').install('<args>')
-    command! -nargs=1 -complete=customlist,v:lua.installed_servers LspUninstall lua require('lspmanager').uninstall('<args>')
-    command! -nargs=1 -complete=customlist,v:lua.installed_servers LspUpdate lua require('lspmanager').update('<args>')
+    command! -nargs=1 -complete=customlist,v:lua.lspmanager.installed_servers LspUninstall lua require('lspmanager').uninstall('<args>')
+    command! -nargs=1 -complete=customlist,v:lua.lspmanager.installed_servers LspUpdate lua require('lspmanager').update('<args>')
     command! -nargs=1 -complete=customlist,v:lua.installed_servers LspHi lua require('lspmanager').test('<args>')
     ]])
     for lang, server_config in pairs(servers) do
@@ -39,14 +39,14 @@ function available_servers()
     return vim.tbl_keys(servers)
 end
 
-function installed_servers()
+function lspmanager.installed_servers()
     return vim.tbl_filter(function(key)
         return is_lsp_installed(key) == 1
     end, available_servers())
 end
 
 function setup_servers()
-    local installed_servers = installed_servers()
+    local installed_servers = lspmanager.installed_servers()
     for _, server in pairs(installed_servers) do
         if utilities.is_vscode_lsp(server) then
             local capabilities = vim.lsp.protocol.make_client_capabilities()
