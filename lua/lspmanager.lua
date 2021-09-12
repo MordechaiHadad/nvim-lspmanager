@@ -39,6 +39,11 @@ lspmanager.installed_servers = function()
     end, lspmanager.available_servers())
 end
 
+lspmanager.installed_servers_for_update = function()
+    local installed = lspmanager.installed_servers()
+    table.insert(installed, "all")
+    return installed
+end
 lspmanager.setup_servers = function()
     local installed_servers = lspmanager.installed_servers()
     for _, server in pairs(installed_servers) do
@@ -86,6 +91,14 @@ lspmanager.uninstall = function(lsp)
 end
 
 lspmanager.update = function(lsp)
+    if lsp == "all" then
+        local installed = lspmanager.installed_servers()
+        for _, server in pairs(installed) do
+            lspmanager.update(server)
+        end
+        return
+    end
+
     if not servers[lsp] then
         error("Could not find LSP " .. lsp)
     end
@@ -98,7 +111,5 @@ lspmanager.update = function(lsp)
 
     jobs.update_job(lsp, path)
 end
-
-lspmanager.test = function(lsp) end
 
 return lspmanager
