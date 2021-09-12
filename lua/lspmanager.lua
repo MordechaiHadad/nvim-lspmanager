@@ -1,7 +1,7 @@
 local lspmanager = {}
 
 local servers = require("lspmanager.servers")
-local configs = require("lspconfig.configs")
+local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local utilities = require("lspmanager.utilities") -- TODO: learn how to declare get_path once and without it saying lsp is a nil value
 
@@ -69,7 +69,7 @@ function lspmanager.uninstall(lsp)
 
     local path = utilities.get_path(lsp)
     if vim.fn.delete(path, "rf") == 0 then
-        vim.notify("sucksexfully uninstalled " .. lsp)
+        vim.notify("Successfully uninstalled " .. lsp)
     else
         error("failed to uninstall " .. lsp)
     end
