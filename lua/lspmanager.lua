@@ -1,11 +1,11 @@
 local lspmanager = {}
 
 local servers = require("lspmanager.servers")
-local configs = require("lspconfig/configs") -- NOTE: Bruh
+local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local utilities = require("lspmanager.utilities") -- TODO: learn how to declare get_path once and without it saying lsp is a nil value
 
-lspmanager.setup = function ()
+lspmanager.setup = function()
     for lang, server_config in pairs(servers) do
         if lspmanager.is_lsp_installed(lang) == 1 and not configs[lang] then
             local config = vim.tbl_deep_extend(
@@ -29,17 +29,17 @@ lspmanager.is_lsp_installed = function(lang)
     return vim.fn.isdirectory(utilities.get_path(lang))
 end
 
-lspmanager.available_servers = function ()
+lspmanager.available_servers = function()
     return vim.tbl_keys(servers)
 end
 
-lspmanager.installed_servers = function ()
+lspmanager.installed_servers = function()
     return vim.tbl_filter(function(key)
         return lspmanager.is_lsp_installed(key) == 1
     end, lspmanager.available_servers())
 end
 
-lspmanager.setup_servers = function ()
+lspmanager.setup_servers = function()
     local installed_servers = lspmanager.installed_servers()
     for _, server in pairs(installed_servers) do
         if utilities.is_vscode_lsp(server) then
