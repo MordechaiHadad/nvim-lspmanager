@@ -1,7 +1,7 @@
 local lspmanager = {}
 
 local servers = require("lspmanager.servers")
-local configs = require("lspconfig/configs")
+local configs = require("lspconfig/configs") -- NOTE: Bruh
 local jobs = require("lspmanager.jobs")
 local utilities = require("lspmanager.utilities") -- TODO: learn how to declare get_path once and without it saying lsp is a nil value
 
@@ -43,7 +43,17 @@ end
 function setup_servers()
     local installed_servers = installed_servers()
     for _, server in pairs(installed_servers) do
-        require("lspconfig")[server].setup({})
+        if utilities.is_vscode_lsp(server) then
+
+            local capabilities = vim.lsp.protocol.make_client_capabilities()
+            capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+            require("lspconfig")[server].setup{
+                capabilities = capabilities
+            }
+        else
+            require("lspconfig")[server].setup({})
+        end
     end
 end
 
@@ -90,8 +100,10 @@ function lspmanager.update(lsp)
     jobs.update_job(lsp, path)
 end
 
-function lspmanager.test()
-
+function lspmanager.test(lsp)
+    if utilities.is_vscode_lsp(lsp) then
+        vim.notify(vim.inspect(servers[lsp]))
+    end
 end
 
 return lspmanager
