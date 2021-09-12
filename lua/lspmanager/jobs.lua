@@ -22,7 +22,7 @@ function jobs.installation_job(lsp, path, is_update)
                         print("Successfully installed " .. lsp)
 
                         vim.schedule(function()
-                            setup_servers()
+                            lspmanager.setup_servers()
 
                             vim.cmd("bufdo e")
                         end)
