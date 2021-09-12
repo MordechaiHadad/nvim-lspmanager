@@ -31,12 +31,12 @@ local function install_script()
         chmod +x rust-analyzer
         echo $version > VERSION
         ]]
-    end
+end
 
-    return vim.tbl_extend('error', config, {
-        install_script = install_script,
+return vim.tbl_extend("error", config, {
+    install_script = install_script,
 
-        update_script = function ()
-            return require("lspmanager.package_managers.manual").update_script("rust-analyzer/rust-analyzer")
-        end
-    })
+    update_script = function()
+        return require("lspmanager.package_managers.manual").update_script("rust-analyzer/rust-analyzer")
+    end,
+})

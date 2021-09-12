@@ -35,7 +35,7 @@ end
 return vim.tbl_extend("error", config, {
     install_script = install_script,
 
-    update_script = function ()
+    update_script = function()
         return require("lspmanager.package_managers.manual").update_script("sumneko/vscode-lua")
-    end
+    end,
 })
