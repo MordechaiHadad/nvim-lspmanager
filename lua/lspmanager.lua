@@ -5,15 +5,9 @@ local configs = require("lspconfig/configs") -- NOTE: Bruh
 local jobs = require("lspmanager.jobs")
 local utilities = require("lspmanager.utilities") -- TODO: learn how to declare get_path once and without it saying lsp is a nil value
 
-function lspmanager.setup()
-    vim.cmd([[
-    command! -nargs=1 -complete=customlist,v:lua.available_servers LspInstall lua require('lspmanager').install('<args>')
-    command! -nargs=1 -complete=customlist,v:lua.installed_servers LspUninstall lua require('lspmanager').uninstall('<args>')
-    command! -nargs=1 -complete=customlist,v:lua.installed_servers LspUpdate lua require('lspmanager').update('<args>')
-    command! -nargs=1 -complete=customlist,v:lua.installed_servers LspHi lua require('lspmanager').test('<args>')
-    ]])
+lspmanager.setup = function ()
     for lang, server_config in pairs(servers) do
-        if is_lsp_installed(lang) == 1 and not configs[lang] then
+        if lspmanager.is_lsp_installed(lang) == 1 and not configs[lang] then
             local config = vim.tbl_deep_extend(
                 "keep",
                 server_config,
@@ -28,25 +22,25 @@ function lspmanager.setup()
             configs[lang] = config
         end
     end
-    setup_servers()
+    lspmanager.setup_servers()
 end
 
-function is_lsp_installed(lang)
+lspmanager.is_lsp_installed = function(lang)
     return vim.fn.isdirectory(utilities.get_path(lang))
 end
 
-function available_servers()
+lspmanager.available_servers = function ()
     return vim.tbl_keys(servers)
 end
 
-function installed_servers()
+lspmanager.installed_servers = function ()
     return vim.tbl_filter(function(key)
-        return is_lsp_installed(key) == 1
-    end, available_servers())
+        return lspmanager.is_lsp_installed(key) == 1
+    end, lspmanager.available_servers())
 end
 
-function setup_servers()
-    local installed_servers = installed_servers()
+lspmanager.setup_servers = function ()
+    local installed_servers = lspmanager.installed_servers()
     for _, server in pairs(installed_servers) do
         if utilities.is_vscode_lsp(server) then
             local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -63,7 +57,7 @@ function setup_servers()
     require("lspconfig").gdscript.setup({})
 end
 
-function lspmanager.install(lsp)
+lspmanager.install = function(lsp)
     if not servers[lsp] then
         error("could not find LSP " .. lsp)
     end
@@ -74,12 +68,12 @@ function lspmanager.install(lsp)
     jobs.installation_job(lsp, path, false)
 end
 
-function lspmanager.uninstall(lsp)
+lspmanager.uninstall = function(lsp)
     if not servers[lsp] then
         error("could not find LSP " .. lsp)
     end
 
-    if is_lsp_installed(lsp) == 0 then
+    if lspmanager.is_lsp_installed(lsp) == 0 then
         error(lsp .. " is not installed")
     end
 
@@ -91,12 +85,12 @@ function lspmanager.uninstall(lsp)
     end
 end
 
-function lspmanager.update(lsp)
+lspmanager.update = function(lsp)
     if not servers[lsp] then
         error("Could not find LSP " .. lsp)
     end
 
-    if is_lsp_installed(lsp) == 0 then
+    if lspmanager.is_lsp_installed(lsp) == 0 then
         error(lsp .. " is not installed")
     end
 
@@ -105,6 +99,6 @@ function lspmanager.update(lsp)
     jobs.update_job(lsp, path)
 end
 
-function lspmanager.test(lsp) end
+lspmanager.test = function(lsp) end
 
 return lspmanager
