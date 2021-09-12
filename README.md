@@ -1,7 +1,14 @@
 # Nvim-lspmanager
 
 Nvim-lspmanager is a powerful and extensible manager for LSPs (Language Server Protocols).
-Using already create configurations from [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig), you can be sure that your lsp will work without having to write a single line of code it.
+Using already created configurations from [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig), you can be sure that your lsp will work without having to write a single line of code it.
+
+## Features
+
+- 3 simple commands missing from native neovim Lsp integration (LspInstall, LspUninstall, LspUpdate)
+- Lots of supported language servers
+- Uses [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) automatically is there is a config for it
+- No need to reload neovim after installing a lsp
 
 ## Installation
 
