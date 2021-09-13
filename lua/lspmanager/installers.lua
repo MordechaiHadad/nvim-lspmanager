@@ -1,6 +1,6 @@
 local package_managers = {
-    ["npm"] = require("lspmanager.package_managers.npm"),
-    ["manual"] = require("lspmanager.package_managers.manual"),
+    npm = require("lspmanager.installers.npm"),
+    manual = require("lspmanager.installers.manual"),
 }
 
 return package_managers
