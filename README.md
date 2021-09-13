@@ -12,7 +12,7 @@ Using already created configurations from [nvim-lspconfig](https://github.com/ne
 
 ## Installation
 #### Dependencies
-Make sure you have `jq`, `curl`, `npm`, 'gzip', and `unzip` installed.
+Make sure you have `jq`, `curl`, `npm`, `gzip`, and `unzip` installed.
 
 - [Packer](https://github.com/wbthomason/packer.nvim)
 ```lua
