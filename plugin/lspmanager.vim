@@ -27,7 +27,7 @@ function! lspmanager#is_lsp_installed(lang) abort
   return luaeval('require("lspmanager").is_lsp_installed("'.a:lang.'")')
 endfunction
 
-command! -nargs=1 -complete=custom,s:complete_available LspInstall :call lspmanager#install_server('<args>')
+command! -nargs=* -complete=custom,s:complete_available LspInstall :call lspmanager#install_server('<args>')
 command! -nargs=1 -complete=custom,s:complete_installed LspUninstall :call lspmanager#uninstall_server('<args>')
 command! -nargs=1 -complete=custom,s:complete_installed_for_update LspUpdate :call lspmanager#update_server('<args>')
 

@@ -65,6 +65,30 @@ lspmanager.setup_servers = function()
 end
 
 lspmanager.install = function(lsp)
+    if not lsp or lsp == "" then
+        local filetype = vim.bo.filetype
+        if vim.lsp.buf.server_ready() then
+            error("Server for filetype " .. filetype .. " already working")
+        end
+        if vim.api.nvim_buf_get_name(0) == "" then
+            error("No file attached in current buffer, aborting...")
+        end
+
+        local available = lspmanager.available_servers()
+
+        for lang, config in pairs(servers) do
+           if vim.tbl_contains(available, lang) then
+               if vim.tbl_contains(config.default_config.filetypes, filetype) then
+                   print("installing " .. lang .. " for current file type...")
+                   lspmanager.install(lang)
+                   return
+               end
+           end
+        end
+
+        return
+    end
+
     if not servers[lsp] then
         error("could not find LSP " .. lsp)
     end
