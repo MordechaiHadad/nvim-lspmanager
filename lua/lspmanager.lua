@@ -33,17 +33,19 @@ lspmanager.available_servers = function()
     return vim.tbl_keys(servers)
 end
 
-lspmanager.installed_servers = function()
-    return vim.tbl_filter(function(key)
+lspmanager.installed_servers = function(opts)
+    opts = opts or {}
+    local res = {}
+    if opts.insert_key_all then
+        table.insert(res, "all")
+    end
+    local installed = vim.tbl_filter(function(key)
         return lspmanager.is_lsp_installed(key) == 1
     end, lspmanager.available_servers())
+    vim.list_extend(res, installed)
+    return res
 end
 
-lspmanager.installed_servers_for_update = function()
-    local installed = lspmanager.installed_servers()
-    table.insert(installed, "all")
-    return installed
-end
 lspmanager.setup_servers = function()
     local installed_servers = lspmanager.installed_servers()
     for _, server in pairs(installed_servers) do

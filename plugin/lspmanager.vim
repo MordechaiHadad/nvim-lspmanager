@@ -19,7 +19,7 @@ function! lspmanager#installed_servers() abort
 endfunction
 
 function! lspmanager#installed_servers_for_update() abort
-  return luaeval('require("lspmanager").installed_servers_for_update()')
+    return luaeval('require("lspmanager").installed_servers({ insert_key_all = true })')
 endfunction
 
 
