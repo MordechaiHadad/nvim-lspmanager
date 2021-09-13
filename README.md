@@ -11,7 +11,10 @@ Using already created configurations from [nvim-lspconfig](https://github.com/ne
 - No need to reload neovim after installing a lsp
 
 ## Installation
+#### Dependencies
+Make sure you have `jq`, `curl`, `npm`, and `unzip` installed.
 
+- [Packer](https://github.com/wbthomason/packer.nvim)
 ```lua
 use {
     'MordechaiHadad/nvim-lspmanager',
