@@ -1,5 +1,6 @@
 local lsp_name = "clangd"
 local config = require("lspmanager.utilities").get_config(lsp_name)
+local installers = require("lspmanager.installers")
 
 config.default_config.cmd[1] = "./clangd/bin/clangd"
 
@@ -31,6 +32,6 @@ return vim.tbl_extend("error", config, {
     install_script = install_script,
 
     update_script = function()
-        return require("lspmanager.package_managers.manual").update_script("clangd/clangd")
+        return installers.manual.update_script("clangd/clangd")
     end,
 })

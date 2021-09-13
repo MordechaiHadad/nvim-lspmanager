@@ -2,7 +2,6 @@ local jobs = {}
 
 local job = require("plenary.job")
 local servers = require("lspmanager.servers")
-local utilities = require("lspmanager.utilities")
 
 function jobs.installation_job(lsp, path, is_update)
     job
@@ -22,9 +21,11 @@ function jobs.installation_job(lsp, path, is_update)
                         print("Successfully installed " .. lsp)
 
                         vim.schedule(function()
-                            setup_servers()
+                            lspmanager.setup_servers() -- FIX: Saying cmd is not specified when installing inside the filetype of the server
 
-                            vim.cmd("bufdo e")
+                            if vim.api.nvim_buf_get_name(0) ~= "" then
+                                vim.cmd("bufdo e")
+                            end
                         end)
                     else
                         print("Failed to install " .. lsp)
