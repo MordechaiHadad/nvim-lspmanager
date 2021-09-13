@@ -6,7 +6,7 @@ config.default_config.cmd[1] = "./node_modules/.bin/tailwindcss-language-server"
 
 return vim.tbl_extend("error", config, {
     install_script = function()
-        return installers.npm.install_script("@tailwindcss/language-server")
+        return installers.npm.install_script({"@tailwindcss/language-server"})
     end,
 
     update_script = function()

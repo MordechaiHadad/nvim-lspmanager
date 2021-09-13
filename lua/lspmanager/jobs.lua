@@ -21,7 +21,7 @@ function jobs.installation_job(lsp, path, is_update)
                         print("Successfully installed " .. lsp)
 
                         vim.schedule(function()
-                            lspmanager.setup_servers()
+                            lspmanager.setup_servers() -- FIX: Saying cmd is not specified when installing inside the filetype of the server
 
                             if vim.api.nvim_buf_get_name(0) ~= "" then
                                 vim.cmd("bufdo e")

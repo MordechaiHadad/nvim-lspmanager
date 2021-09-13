@@ -6,7 +6,7 @@ config.default_config.cmd[1] = "./node_modules/.bin/vls"
 
 return vim.tbl_extend("error", config, {
     install_script = function()
-        return installers.npm.install_script("vls")
+        return installers.npm.install_script({"vls"})
     end,
 
     update_script = function()

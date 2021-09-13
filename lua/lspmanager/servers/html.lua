@@ -6,7 +6,7 @@ config.default_config.cmd[1] = "./node_modules/.bin/vscode-html-language-server"
 
 return vim.tbl_extend("error", config, {
     install_script = function()
-        return installers.npm.install_script("vscode-langservers-extracted")
+        return installers.npm.install_script({"vscode-langservers-extracted"})
     end,
 
     update_script = function()

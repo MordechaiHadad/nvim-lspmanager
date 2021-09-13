@@ -6,7 +6,7 @@ config.default_config.cmd[1] = "./node_modules/.bin/pyright-langserver"
 
 return vim.tbl_extend("error", config, {
     install_script = function()
-        return installers.npm.install_script("pyright")
+        return installers.npm.install_script({"pyright"})
     end,
 
     update_script = function()
