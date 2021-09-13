@@ -33,17 +33,19 @@ lspmanager.available_servers = function()
     return vim.tbl_keys(servers)
 end
 
-lspmanager.installed_servers = function()
-    return vim.tbl_filter(function(key)
+lspmanager.installed_servers = function(opts)
+    opts = opts or {}
+    local res = {}
+    if opts.insert_key_all then
+        table.insert(res, "all")
+    end
+    local installed = vim.tbl_filter(function(key)
         return lspmanager.is_lsp_installed(key) == 1
     end, lspmanager.available_servers())
+    vim.list_extend(res, installed)
+    return res
 end
 
-lspmanager.installed_servers_for_update = function()
-    local installed = lspmanager.installed_servers()
-    table.insert(installed, "all")
-    return installed
-end
 lspmanager.setup_servers = function()
     local installed_servers = lspmanager.installed_servers()
     for _, server in pairs(installed_servers) do
@@ -63,6 +65,42 @@ lspmanager.setup_servers = function()
 end
 
 lspmanager.install = function(lsp)
+    if not lsp or lsp == "" then
+        local filetype = vim.bo.filetype
+
+        if vim.lsp.buf.server_ready() then
+            error("Server for filetype " .. filetype .. " already working")
+        end
+        if vim.api.nvim_buf_get_name(0) == "" or filetype == "" then
+            error("No file attached in current buffer, aborting...")
+        end
+
+        local available = lspmanager.available_servers()
+        local available_for_filetype = {}
+        for lang, config in pairs(servers) do
+            if vim.tbl_contains(available, lang) then
+                if vim.tbl_contains(config.default_config.filetypes, filetype) then
+                    table.insert(available_for_filetype, lang)
+                end
+            end
+        end
+
+        if #available_for_filetype == 1 then
+            print("installing " .. available_for_filetype[1] .. " for current file type...")
+            lspmanager.install(available_for_filetype[1])
+        elseif #available_for_filetype == 0 then
+            error("no server found for filetype " .. filetype)
+        elseif #available_for_filetype > 1 then
+            error(
+                "multiple servers found ("
+                    .. table.concat(available_for_filetype, "/")
+                    .. "), please install one of them"
+            )
+        end
+
+        return
+    end
+
     if not servers[lsp] then
         error("could not find LSP " .. lsp)
     end
