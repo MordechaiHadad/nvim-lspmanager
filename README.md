@@ -18,7 +18,7 @@ Make sure you have `jq`, `curl`, `npm`, 'gzip', and `unzip` installed.
 ```lua
 use {
     'MordechaiHadad/nvim-lspmanager',
-    requires = {'neovim/nvim-lspconfig', 'nvim-lua/plenary.nvim'},
+    requires = {'neovim/nvim-lspconfig'},
     config = function()
         require('lspmanager').setup()
     end,
