@@ -41,7 +41,6 @@ use {
 | :white_check_mark: | CSS                                            | `cssls` |
 | :white_check_mark: | Docker                                         | `dockerls` |
 | :white_check_mark: | C/C++                                     | `clangd` |
-| :white_check_mark: | Csharp | `omnisharp` |
 | :white_check_mark: | CSS                                           | `cssls` |
 | :white_check_mark: | Fsharp                                         | `fsautocomplete` |
 | :white_check_mark: | HTML                                           | `html` |
