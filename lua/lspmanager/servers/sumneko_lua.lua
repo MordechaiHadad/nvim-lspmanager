@@ -10,7 +10,7 @@ else
     cmd_exec = cmd_exec .. "Linux/lua-language-server"
 end
 
-config.default_config.cmd = { cmd_exec, "-E", "./extension/server/main.lua"}
+config.default_config.cmd = { cmd_exec, "-E", "./extension/server/main.lua" }
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then

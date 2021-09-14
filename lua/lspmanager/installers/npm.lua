@@ -8,8 +8,7 @@ function npm.install_script(args) -- TODO: Change it from string to a table
         if(-not(Test-Path -Path 'package.json' -PathType Leaf)) {
             Invoke-Expression 'npm init -y --scope=lspinstall'
         }
-        Invoke-Expression 'npm install ]] .. table.concat(args, " ") .. "'\n" ..
-        [[ exit $LASTEXITCODE
+        Invoke-Expression 'npm install ]] .. table.concat(args, " ") .. "'\n" .. [[ exit $LASTEXITCODE
         ]]
     end
     return [[
@@ -39,6 +38,6 @@ function npm.update_script()
         exit 69
         fi
         ]]
-    end
+end
 
-    return npm
+return npm

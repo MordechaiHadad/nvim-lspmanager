@@ -4,7 +4,7 @@ local uv = vim.loop
 os.OSes = {
     Nothing = 0,
     Windows = 1,
-    Unix = 2
+    Unix = 2,
 }
 
 local current_os = os.OSes.Nothing
@@ -15,7 +15,7 @@ else
     current_os = os.OSes.Unix
 end
 
-os.get_os = function ()
+os.get_os = function()
     return current_os
 end
 
