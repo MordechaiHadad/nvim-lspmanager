@@ -32,7 +32,7 @@ use {
 - `:LspUninstall ...:` Uninstall an installed language server
 - `:LspUpdate ...`: Update an installed language server. (`:LspUpdate all` will update all installed ones)
 
-##Supported language servers
+## Supported language servers
 
 |                    | Language                                       | Language server |
 | :----------------- | :--------------------------------------------- | :--------------------------------------------------------------------------- |
