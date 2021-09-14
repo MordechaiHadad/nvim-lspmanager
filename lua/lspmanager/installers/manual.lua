@@ -20,8 +20,8 @@ function manual.update_script(link)
         }
         exit 70
     ]]
-end
-return [[
+    end
+    return [[
 installed_version=$(cat VERSION)
 upstream_version=$(curl -s https://api.github.com/repos/]] .. link .. [[/releases/latest | jq -r '.tag_name')
 

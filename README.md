@@ -9,6 +9,7 @@ Using pre-made configurations from [nvim-lspconfig](https://github.com/neovim/nv
 - Lots of supported language servers
 - Uses [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) to require configurations for each lsp
 - No need to reload neovim after installing a lsp
+- Fully supports windows
 
 ## Installation
 #### Dependencies

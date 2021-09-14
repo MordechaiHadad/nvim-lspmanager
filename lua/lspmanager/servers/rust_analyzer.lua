@@ -52,8 +52,7 @@ local function install_script()
                 $input.close()
             }
 
-            $path = "]] .. path .. [["]] ..
-            [[
+            $path = "]] .. path .. [["]] .. [[
 
             $infile="$($path)/$($out)"
             $outfile="$($path)/rust-analyzer.exe"
@@ -63,8 +62,8 @@ local function install_script()
             out-file -filepath version -encoding string -inputobject "$($version)"
             remove-item $out
             ]]
-        end
-        return [[
+    end
+    return [[
         os=$(uname -s | tr "[:upper:]" "[:lower:]")
         mchn=$(uname -m | tr "[:upper:]" "[:lower:]")
         version=$(curl -s "https://api.github.com/repos/rust-analyzer/rust-analyzer/releases/latest" | jq -r '.tag_name')
@@ -91,12 +90,12 @@ local function install_script()
             chmod +x rust-analyzer
             echo $version > VERSION
             ]]
-        end
+end
 
-        return vim.tbl_extend("error", config, {
-            install_script = install_script,
+return vim.tbl_extend("error", config, {
+    install_script = install_script,
 
-            update_script = function()
-                return require("lspmanager.installers.manual").update_script("rust-analyzer/rust-analyzer")
-            end,
-        })
+    update_script = function()
+        return require("lspmanager.installers.manual").update_script("rust-analyzer/rust-analyzer")
+    end,
+})

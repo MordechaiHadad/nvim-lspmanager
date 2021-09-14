@@ -13,7 +13,7 @@ config.default_config.cmd[1] = cmd_exec
 
 return vim.tbl_extend("error", config, {
     install_script = function()
-        return installers.npm.install_script({"dockerfile-language-server-nodejs"})
+        return installers.npm.install_script({ "dockerfile-language-server-nodejs" })
     end,
 
     update_script = function()
