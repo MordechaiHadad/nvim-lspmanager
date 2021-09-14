@@ -7,7 +7,7 @@ Using pre-made configurations from [nvim-lspconfig](https://github.com/neovim/nv
 
 - 3 simple commands missing from native neovim Lsp integration (LspInstall, LspUninstall, LspUpdate)
 - Lots of supported language servers
-- Uses [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) to require configurations for each lsp 
+- Uses [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) to require configurations for each lsp
 - No need to reload neovim after installing a lsp
 
 ## Installation
