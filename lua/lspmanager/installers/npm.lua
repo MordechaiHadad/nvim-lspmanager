@@ -23,7 +23,7 @@ function npm.update_script()
         $result = $null
         $result = Invoke-Expression 'npm outdated'
 
-        if ($OutlookAccounts -ne $null) {
+        if ($result -ne $null) {
             Invoke-Expression 'npm update'
             exit 0
         }
