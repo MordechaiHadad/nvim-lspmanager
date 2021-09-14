@@ -37,11 +37,10 @@ use {
 |                    | Language                                       | Language server |
 | :----------------- | :--------------------------------------------- | :--------------------------------------------------------------------------- |
 | :white_check_mark: | Angular                                        | `angularls` |
-| :white_check_mark: | C                                              | `clangd` |
+| :white_check_mark: | C/C++                                          | `clangd` |
 | :white_check_mark: | CSS                                            | `cssls` |
 | :white_check_mark: | Docker                                         | `dockerls` |
-| :white_check_mark: | C/C++                                     | `clangd` |
-| :white_check_mark: | CSS                                           | `cssls` |
+| :white_check_mark: | CSS                                            | `cssls` |
 | :white_check_mark: | Fsharp                                         | `fsautocomplete` |
 | :white_check_mark: | HTML                                           | `html` |
 | :white_check_mark: | JSON                                           | `jsonls` |
