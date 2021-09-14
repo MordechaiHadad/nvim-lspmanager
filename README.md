@@ -13,7 +13,7 @@ Using pre-made configurations from [nvim-lspconfig](https://github.com/neovim/nv
 
 ## Installation
 #### Dependencies
-Make sure you have `jq`, `curl`, `npm`, 'gzip', and `unzip` installed.
+Make sure you have `jq`, `curl`, `npm`, `gzip`, and `unzip` installed.
 
 - [Packer](https://github.com/wbthomason/packer.nvim)
 ```lua
@@ -40,6 +40,9 @@ use {
 | :white_check_mark: | C                                              | `clangd` |
 | :white_check_mark: | CSS                                            | `cssls` |
 | :white_check_mark: | Docker                                         | `dockerls` |
+| :white_check_mark: | C/C++                                     | `clangd` |
+| :white_check_mark: | Csharp | `omnisharp` |
+| :white_check_mark: | CSS                                           | `cssls` |
 | :white_check_mark: | Fsharp                                         | `fsautocomplete` |
 | :white_check_mark: | HTML                                           | `html` |
 | :white_check_mark: | JSON                                           | `jsonls` |
