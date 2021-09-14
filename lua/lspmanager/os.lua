@@ -1,5 +1,5 @@
 local os = {}
-local luv = require"luv"
+local uv = vim.loop
 
 os.OSes = {
     Nothing = 0,
@@ -9,7 +9,7 @@ os.OSes = {
 
 local current_os = os.OSes.Nothing
 
-if luv.os_uname().sysname == "Windows_NT" then
+if uv.os_uname().sysname == "Windows_NT" then
     current_os = os.OSes.Windows
 else
     current_os = os.OSes.Unix

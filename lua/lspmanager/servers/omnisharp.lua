@@ -1,9 +1,42 @@
 local lsp_name = "omnisharp"
 local config = require("lspmanager.utilities").get_config(lsp_name)
+local os = require("lspmanager.os")
 
-config.default_config.cmd = { "./run", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) }
+local cmd_exec = ""
+if os.get_os() == os.OSes.Windows then
+    cmd_exec = "./OmniSharp.exe"
+else
+    cmd_exec = "./run"
+end
+
+config.default_config.cmd = { cmd_exec, "--languageserver", "--hostPID", tostring(vim.fn.getpid()) }
 
 local function install_script()
+    if os.get_os() == os.OSes.Windows then
+        return [[
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+        function get_latest_version() {
+            $response = invoke-restmethod -uri "https://api.github.com/repos/omnisharp/omnisharp-roslyn/releases/latest"
+            return $response.tag_name
+        }
+
+        $version = get_latest_version
+        $url = "https://github.com/OmniSharp/omnisharp-roslyn/releases/download/$($version)/omnisharp-win-x64.zip"
+        $out = "omnisharp.zip"
+        
+        if (Test-Path -Path Get-Location) {
+            Remove-Item Get-Location -Force -Recurse
+        }
+        Invoke-WebRequest -Uri $url -OutFile $out
+        
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        [System.IO.Compression.ZipFile]::ExtractToDirectory($out, ".")
+
+        Out-File -FilePath VERSION -Encoding string -InputObject "$($version)"
+        Remove-Item $out
+        ]]
+    end
     return [[
     os=$(uname -s | tr "[:upper:]" "[:lower:]")
     version=$(curl -s "https://api.github.com/repos/OmniSharp/omnisharp-roslyn/releases/latest" | jq -r '.tag_name')
