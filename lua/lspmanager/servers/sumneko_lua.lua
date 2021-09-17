@@ -2,7 +2,7 @@ local lsp_name = "sumneko_lua"
 local config = require("lspmanager.utilities").get_config(lsp_name)
 local os = require("lspmanager.os")
 
-local cmd_exec = "./extension/server/bin/"
+local cmd_exec = "./bin/"
 
 if os.get_os() == os.OSes.Windows then
     cmd_exec = cmd_exec .. "Windows/lua-language-server.exe"
@@ -10,7 +10,7 @@ else
     cmd_exec = cmd_exec .. "Linux/lua-language-server"
 end
 
-config.default_config.cmd = { cmd_exec, "-E", "./extension/server/main.lua" }
+config.default_config.cmd = { cmd_exec, "-E", "./main.lua" }
 config.default_config.settings = {
     Lua = {
         telemetry = {
@@ -50,8 +50,7 @@ local function install_script()
     end
     return [[
     os=$(uname -s | tr "[:upper:]" "[:lower:]")
-    version=$(curl -s "https://api.github.com/repos/sumneko/vscode-lua/releases/latest" | jq -r '.tag_name')
-
+    version=$(curl -s "https://api.github.com/repos/sumneko/vscode-lua/tags" | jq -r '.[0].name')
     case $os in
     linux)
     platform="Linux"
@@ -60,15 +59,14 @@ local function install_script()
     platform="macOS"
     ;;
     esac
-
-    curl -L -o "sumneko-lua.vsix" "https://github.com/sumneko/vscode-lua/releases/download/$version/lua-$(echo $version | sed 's/v//').vsix"
-    rm -rf sumneko-lua
-    unzip sumneko-lua.vsix -d .
-    rm sumneko-lua.vsix
-
-    chmod +x extension/server/bin/$platform/lua-language-server
-
-    echo $version > VERSION
+	git clone https://github.com/sumneko/lua-language-server .
+	git submodule update --init --recursive
+	cd 3rd/luamake
+	./compile/install.sh
+	cd ../..
+	./3rd/luamake/luamake rebuild
+	chmod +x extension/server/bin/$platform/lua-language-server
+	echo $version > VERSION
     ]]
 end
 
