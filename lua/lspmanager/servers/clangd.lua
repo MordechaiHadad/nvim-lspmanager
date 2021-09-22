@@ -5,7 +5,7 @@ local os = require("lspmanager.os")
 
 local cmd_exec = "./clangd/bin/clangd"
 
-if get_os == os.OSes.Windows then
+if os.get_os == os.OSes.Windows then
     cmd_exec = cmd_exec .. ".exe"
 end
 
