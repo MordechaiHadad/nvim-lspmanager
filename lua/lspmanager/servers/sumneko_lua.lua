@@ -17,9 +17,9 @@ config.default_config.settings = {
             enable = false,
         },
         workspace = {
-            preloadFileSize = 180
-        }
-    }
+            preloadFileSize = 180,
+        },
+    },
 }
 
 local function install_script()
@@ -49,6 +49,11 @@ local function install_script()
         ]]
     end
     return [[
+    if ! command -v jq &> /dev/null
+    then
+        exit 123
+    fi
+
     os=$(uname -s | tr "[:upper:]" "[:lower:]")
     version=$(curl -s "https://api.github.com/repos/sumneko/vscode-lua/releases/latest" | jq -r '.tag_name')
 

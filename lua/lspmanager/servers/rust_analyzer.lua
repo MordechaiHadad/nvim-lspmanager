@@ -64,6 +64,11 @@ local function install_script()
             ]]
     end
     return [[
+    if ! command -v jq &> /dev/null
+    then
+        exit 123
+    fi
+
         os=$(uname -s | tr "[:upper:]" "[:lower:]")
         mchn=$(uname -m | tr "[:upper:]" "[:lower:]")
         version=$(curl -s "https://api.github.com/repos/rust-analyzer/rust-analyzer/releases/latest" | jq -r '.tag_name')
