@@ -9,11 +9,7 @@ lspmanager.setup = function()
     for lsp, server_config in pairs(servers) do
         local path = get_path(lsp)
         if lspmanager.is_lsp_installed(lsp) == 1 and not configs[lsp] then
-            local config = vim.tbl_deep_extend(
-            "keep",
-            server_config,
-            { default_config = { cmd_cwd = path } }
-            )
+            local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
             if config.default_config.cmd then
                 local executable = config.default_config.cmd[1]
                 if vim.regex([[\.\/]]):match_str(executable) then
@@ -50,7 +46,7 @@ end
 lspmanager.setup_servers = function()
     local installed_servers = lspmanager.installed_servers()
     for _, server in pairs(installed_servers) do
-        if require('lspmanager.utilities').is_vscode_lsp(server) then
+        if require("lspmanager.utilities").is_vscode_lsp(server) then
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -93,9 +89,9 @@ lspmanager.install = function(lsp)
             error("no server found for filetype " .. filetype)
         elseif #available_for_filetype > 1 then
             error(
-            "multiple servers found ("
-            .. table.concat(available_for_filetype, "/")
-            .. "), please install one of them"
+                "multiple servers found ("
+                    .. table.concat(available_for_filetype, "/")
+                    .. "), please install one of them"
             )
         end
 
