@@ -34,7 +34,7 @@ function jobs.installation_job(lsp, path, is_update)
                         end
                     end)
                 elseif exitcode == 123 then
-                    print("Jq isn't installed please install it reinstall " .. lsp)
+                    print("Jq isn't installed, please install jq and reinstall " .. lsp)
                 else
                     print("Failed to install " .. lsp)
                 end
