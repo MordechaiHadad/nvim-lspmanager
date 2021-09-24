@@ -108,7 +108,7 @@ lspmanager.install = function(lsp)
     local path = utilities.get_path(lsp)
     vim.fn.mkdir(path, "p")
 
-    print("Installing " .. lsp)
+    print("Installing " .. lsp .. "...")
     jobs.installation_job(lsp, path, false)
 end
 

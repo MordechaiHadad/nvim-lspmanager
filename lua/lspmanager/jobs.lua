@@ -17,6 +17,8 @@ function jobs.installation_job(lsp, path, is_update)
             if is_update then
                 if exitcode == 0 then
                     print("Successfully updated " .. lsp)
+                elseif exitcode == 123 then
+                    print("Jq isn't installed please install it reinstall " .. lsp)
                 else
                     print("Failed to update .. " .. lsp)
                 end
@@ -31,6 +33,8 @@ function jobs.installation_job(lsp, path, is_update)
                             vim.cmd("bufdo e")
                         end
                     end)
+                elseif exitcode == 123 then
+                    print("Jq isn't installed please install it reinstall " .. lsp)
                 else
                     print("Failed to install " .. lsp)
                 end

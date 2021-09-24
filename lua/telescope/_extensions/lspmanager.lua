@@ -1,22 +1,22 @@
 local has_telescope, telescope = pcall(require, "telescope")
 
 if not has_telescope then
-  error("This plugin requires nvim-telescope/telescope.nvim")
+    error("This plugin requires nvim-telescope/telescope.nvim")
 end
 
-local pickers = require "telescope.pickers"
-local finders = require "telescope.finders"
+local pickers = require("telescope.pickers")
+local finders = require("telescope.finders")
 local conf = require("telescope.config").values
-local actions = require "telescope.actions"
-local action_state = require "telescope.actions.state"
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
 local manager = require("lspmanager")
 
-local lspmanager = function(opts)
+local install = function(opts)
     pickers.new(opts, {
         prompt_title = "servers",
-        finder = finders.new_table {
+        finder = finders.new_table({
             results = manager.available_servers(),
-        },
+        }),
         sorter = conf.generic_sorter(opts),
         attach_mappings = function(prompt_bufnr, map)
             actions.select_default:replace(function()
@@ -31,8 +31,17 @@ local lspmanager = function(opts)
     }):find()
 end
 
-lspmanager()
+local lspuninstall = function(opts)
+    pickers.new(opts, {
+        prompt_title = "Sex",
+        finder = finders.new_table({
+            results = { "bruh", "yo" },
+        }),
+
+        sorter = conf.generic_sorter(opts),
+    }):find()
+end
 
 return telescope.register_extension({
-  exports = { lspmanager = lspmanager },
+    exports = { lspmanager = install },
 })
