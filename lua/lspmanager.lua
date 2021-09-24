@@ -3,17 +3,13 @@ lspmanager = {}
 local servers = require("lspmanager.servers")
 local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
-local get_path = require("lspmanager.utilities").get_path 
+local get_path = require("lspmanager.utilities").get_path
 
 lspmanager.setup = function()
     for lsp, server_config in pairs(servers) do
         local path = get_path(lsp)
         if lspmanager.is_lsp_installed(lsp) == 1 and not configs[lsp] then
-            local config = vim.tbl_deep_extend(
-                "keep",
-                server_config,
-                { default_config = { cmd_cwd = path } }
-            )
+            local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
             if config.default_config.cmd then
                 local executable = config.default_config.cmd[1]
                 if vim.regex([[\.\/]]):match_str(executable) then
@@ -50,7 +46,7 @@ end
 lspmanager.setup_servers = function()
     local installed_servers = lspmanager.installed_servers()
     for _, server in pairs(installed_servers) do
-        if require('lspmanager.utilities').is_vscode_lsp(server) then
+        if require("lspmanager.utilities").is_vscode_lsp(server) then
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -81,7 +77,7 @@ lspmanager.install = function(lsp)
         for lsp, config in pairs(servers) do
             if vim.tbl_contains(available, lsp) then
                 if vim.tbl_contains(config.default_config.filetypes, filetype) then
-                    table.insert(available_for_filetype, lslspp)
+                    table.insert(available_for_filetype, lsp)
                 end
             end
         end
@@ -104,6 +100,10 @@ lspmanager.install = function(lsp)
 
     if not servers[lsp] then
         error("could not find LSP " .. lsp)
+    end
+
+    if vim.lsp.buf.server_ready() then
+        error(lsp .. " Already installed and working")
     end
 
     local path = get_path(lsp)
