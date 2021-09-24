@@ -5,6 +5,7 @@ local servers = {
     ["dockerls"] = require("lspmanager.servers.dockerls"),
     ["fsautocomplete"] = require("lspmanager.servers.fsautocomplete"),
     ["html"] = require("lspmanager.servers.html"),
+    ["jdtls"] = require("lspmanager.servers.jdtls"),
     ["jsonls"] = require("lspmanager.servers.jsonls"),
     ["omnisharp"] = require("lspmanager.servers.omnisharp"),
     ["pyright"] = require("lspmanager.servers.pyright"),

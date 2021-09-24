@@ -3,30 +3,31 @@ lspmanager = {}
 local servers = require("lspmanager.servers")
 local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
-local utilities = require("lspmanager.utilities") -- TODO: learn how to declare get_path once and without it saying lsp is a nil value
+local get_path = require("lspmanager.utilities").get_path 
 
 lspmanager.setup = function()
-    for lang, server_config in pairs(servers) do
-        if lspmanager.is_lsp_installed(lang) == 1 and not configs[lang] then
+    for lsp, server_config in pairs(servers) do
+        local path = get_path(lsp)
+        if lspmanager.is_lsp_installed(lsp) == 1 and not configs[lsp] then
             local config = vim.tbl_deep_extend(
                 "keep",
                 server_config,
-                { default_config = { cmd_cwd = utilities.get_path(lang) } }
+                { default_config = { cmd_cwd = path } }
             )
             if config.default_config.cmd then
                 local executable = config.default_config.cmd[1]
                 if vim.regex([[\.\/]]):match_str(executable) then
-                    config.default_config.cmd[1] = utilities.get_path(lang) .. "/" .. executable
+                    config.default_config.cmd[1] = path .. "/" .. executable
                 end
             end
-            configs[lang] = config
+            configs[lsp] = config
         end
     end
     lspmanager.setup_servers()
 end
 
-lspmanager.is_lsp_installed = function(lang)
-    return vim.fn.isdirectory(utilities.get_path(lang))
+lspmanager.is_lsp_installed = function(lsp)
+    return vim.fn.isdirectory(get_path(lsp))
 end
 
 lspmanager.available_servers = function()
@@ -49,7 +50,7 @@ end
 lspmanager.setup_servers = function()
     local installed_servers = lspmanager.installed_servers()
     for _, server in pairs(installed_servers) do
-        if utilities.is_vscode_lsp(server) then
+        if require('lspmanager.utilities').is_vscode_lsp(server) then
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -77,10 +78,10 @@ lspmanager.install = function(lsp)
 
         local available = lspmanager.available_servers()
         local available_for_filetype = {}
-        for lang, config in pairs(servers) do
-            if vim.tbl_contains(available, lang) then
+        for lsp, config in pairs(servers) do
+            if vim.tbl_contains(available, lsp) then
                 if vim.tbl_contains(config.default_config.filetypes, filetype) then
-                    table.insert(available_for_filetype, lang)
+                    table.insert(available_for_filetype, lslspp)
                 end
             end
         end
@@ -105,7 +106,7 @@ lspmanager.install = function(lsp)
         error("could not find LSP " .. lsp)
     end
 
-    local path = utilities.get_path(lsp)
+    local path = get_path(lsp)
     vim.fn.mkdir(path, "p")
 
     print("Installing " .. lsp .. "...")
@@ -121,7 +122,7 @@ lspmanager.uninstall = function(lsp)
         error(lsp .. " is not installed")
     end
 
-    local path = utilities.get_path(lsp)
+    local path = get_path(lsp)
     if vim.fn.delete(path, "rf") == 0 then
         vim.notify("Successfully uninstalled " .. lsp)
     else
@@ -146,7 +147,7 @@ lspmanager.update = function(lsp)
         error(lsp .. " is not installed")
     end
 
-    local path = utilities.get_path(lsp)
+    local path = get_path(lsp)
 
     jobs.update_job(lsp, path)
 end

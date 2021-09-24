@@ -31,17 +31,6 @@ local install = function(opts)
     }):find()
 end
 
-local lspuninstall = function(opts)
-    pickers.new(opts, {
-        prompt_title = "Sex",
-        finder = finders.new_table({
-            results = { "bruh", "yo" },
-        }),
-
-        sorter = conf.generic_sorter(opts),
-    }):find()
-end
-
 return telescope.register_extension({
     exports = { lspmanager = install },
 })
