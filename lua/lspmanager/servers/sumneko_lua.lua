@@ -4,8 +4,11 @@ local os = require("lspmanager.os")
 
 local cmd_exec = "./extension/server/bin/"
 
-if os.get_os() == os.OSes.Windows then
+local current_os = os.get_os()
+if current_os == os.OSes.Windows then
     cmd_exec = cmd_exec .. "Windows/lua-language-server.exe"
+elseif current_os == os.OSes.MacOS then
+    cmd_exec = cmd_exec .. "macOS/lua-language-server"
 else
     cmd_exec = cmd_exec .. "Linux/lua-language-server"
 end
