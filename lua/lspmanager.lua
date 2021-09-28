@@ -6,20 +6,7 @@ local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
 
 lspmanager.setup = function()
-    for lsp, server_config in pairs(servers) do
-        local path = get_path(lsp)
-        if lspmanager.is_lsp_installed(lsp) == 1 and not configs[lsp] then
-            local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
-            if config.default_config.cmd then
-                local executable = config.default_config.cmd[1]
-                if vim.regex([[\.\/]]):match_str(executable) then
-                    config.default_config.cmd[1] = path .. "/" .. executable
-                end
-            end
-            configs[lsp] = config
-        end
-    end
-    lspmanager.setup_servers()
+    lspmanager.setup_servers(false, nil)
 end
 
 lspmanager.is_lsp_installed = function(lsp)
@@ -43,21 +30,56 @@ lspmanager.installed_servers = function(opts)
     return res
 end
 
-lspmanager.setup_servers = function()
-    local installed_servers = lspmanager.installed_servers()
-    for _, server in pairs(installed_servers) do
-        if require("lspmanager.utilities").is_vscode_lsp(server) then
+lspmanager.setup_servers = function(is_install, lsp)
+    if is_install then
+        local server_config = servers[lsp]
+        local path = get_path(lsp)
+
+        local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
+        if config.default_config.cmd then
+            local executable = config.default_config.cmd[1]
+            if vim.regex([[\.\/]]):match_str(executable) then
+                config.default_config.cmd[1] = path .. "/" .. executable
+            end
+        end
+        configs[lsp] = config
+
+        if require("lspmanager.utilities").is_vscode_lsp(lsp) then
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-            require("lspconfig")[server].setup({
+            require("lspconfig")[lsp].setup({
                 capabilities = capabilities,
             })
         else
-            require("lspconfig")[server].setup({})
+            require("lspconfig")[lsp].setup({})
+        end
+        return
+    end
+    for lsp, server_config in pairs(servers) do
+        local path = get_path(lsp)
+        if lspmanager.is_lsp_installed(lsp) == 1 and not configs[lsp] then
+            local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
+            if config.default_config.cmd then
+                local executable = config.default_config.cmd[1]
+                if vim.regex([[\.\/]]):match_str(executable) then
+                    config.default_config.cmd[1] = path .. "/" .. executable
+                end
+            end
+            configs[lsp] = config
+
+            if require("lspmanager.utilities").is_vscode_lsp(lsp) then
+                local capabilities = vim.lsp.protocol.make_client_capabilities()
+                capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+                require("lspconfig")[lsp].setup({
+                    capabilities = capabilities,
+                })
+            else
+                require("lspconfig")[lsp].setup({})
+            end
         end
     end
-
     require("lspconfig").gdscript.setup({})
 end
 
@@ -84,14 +106,18 @@ lspmanager.install = function(lsp)
 
         if #available_for_filetype == 1 then
             print("installing " .. available_for_filetype[1] .. " for current file type...")
-            lspmanager.install(available_for_filetype[1])
+
+            local path = get_path(available_for_filetype[1])
+            vim.fn.mkdir(path, "p")
+
+            jobs.installation_job(available_for_filetype[1], path, false)
         elseif #available_for_filetype == 0 then
             error("no server found for filetype " .. filetype)
         elseif #available_for_filetype > 1 then
             error(
-                "multiple servers found ("
-                    .. table.concat(available_for_filetype, "/")
-                    .. "), please install one of them"
+            "multiple servers found ("
+            .. table.concat(available_for_filetype, "/")
+            .. "), please install one of them"
             )
         end
 
