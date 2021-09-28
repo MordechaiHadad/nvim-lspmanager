@@ -19,6 +19,8 @@ function jobs.installation_job(lsp, path, is_update)
                     print("Successfully updated " .. lsp)
                 elseif exitcode == 123 then
                     print("Jq isn't installed please install it reinstall " .. lsp)
+
+                    vim.fn.delete(path, "rf")
                 else
                     print("Failed to update .. " .. lsp)
                 end
@@ -27,16 +29,17 @@ function jobs.installation_job(lsp, path, is_update)
                     print("Successfully installed " .. lsp)
 
                     vim.schedule(function()
-                        lspmanager.setup_servers() -- FIX: Saying cmd is not specified when installing inside the filetype of the server
-
                         if vim.api.nvim_buf_get_name(0) ~= "" then
+                            lspmanager.setup_servers(true, lsp)
                             vim.cmd("bufdo e")
                         end
                     end)
                 elseif exitcode == 123 then
                     print("Jq isn't installed, please install jq and reinstall " .. lsp)
+                    vim.fn.delete(path, "rf")
                 else
                     print("Failed to install " .. lsp)
+                    vim.fn.delete(path, "rf")
                 end
             end
         end,
