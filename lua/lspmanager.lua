@@ -34,7 +34,7 @@ lspmanager.installed_servers = function(opts)
     return res
 end
 
-lspmanager.setup_servers = function(is_install, lsp)
+lspmanager.setup_servers = function(is_install, lsp, servers_config)
     if is_install then
         local server_config = servers[lsp].config
         local path = get_path(lsp)
