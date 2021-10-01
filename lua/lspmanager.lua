@@ -1,4 +1,4 @@
-local lspmanager = {}
+lspmanager = {}
 
 local servers = require("lspmanager.servers")
 local configs = require("lspconfig/configs")
