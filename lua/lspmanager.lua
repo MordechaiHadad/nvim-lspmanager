@@ -5,7 +5,6 @@ local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
 local servers_config = require("lspmanager.config").get()
-
 local servers_list = require("lspmanager.utilities").servers_list
 
 lspmanager.setup = function(user_configs)
@@ -34,7 +33,7 @@ lspmanager.installed_servers = function(opts)
     return res
 end
 
-lspmanager.setup_servers = function(is_install, lsp, servers_config)
+lspmanager.setup_servers = function(is_install, lsp)
     if is_install then
         local server_config = servers[lsp].config
         local path = get_path(lsp)
