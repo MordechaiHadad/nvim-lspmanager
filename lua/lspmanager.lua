@@ -1,12 +1,13 @@
-lspmanager = {}
+local lspmanager = {}
 
 local servers = require("lspmanager.servers")
 local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
 
-lspmanager.setup = function()
-    lspmanager.setup_servers(false, nil)
+lspmanager.setup = function(user_configs)
+    local config = require("lspmanager.config").set(user_configs or {})
+    lspmanager.setup_servers(false, nil, config)
 end
 
 lspmanager.is_lsp_installed = function(lsp)
@@ -30,7 +31,7 @@ lspmanager.installed_servers = function(opts)
     return res
 end
 
-lspmanager.setup_servers = function(is_install, lsp)
+lspmanager.setup_servers = function(is_install, lsp, servers_config)
     if is_install then
         local server_config = servers[lsp]
         local path = get_path(lsp)
@@ -42,6 +43,8 @@ lspmanager.setup_servers = function(is_install, lsp)
                 config.default_config.cmd[1] = path .. "/" .. executable
             end
         end
+
+        config = vim.tbl_deep_extend("force", config, servers_config[lsp])
         configs[lsp] = config
 
         if require("lspmanager.utilities").is_vscode_lsp(lsp) then
@@ -66,6 +69,7 @@ lspmanager.setup_servers = function(is_install, lsp)
                     config.default_config.cmd[1] = path .. "/" .. executable
                 end
             end
+            config = vim.tbl_deep_extend("force", config, servers_config[lsp])
             configs[lsp] = config
 
             if require("lspmanager.utilities").is_vscode_lsp(lsp) then
