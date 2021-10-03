@@ -125,7 +125,7 @@ lspmanager.install = function(lsp)
 
     for _, config in pairs(vim.lsp.get_active_clients()) do
         if config.name == lsp then
-            print("Sussy baka")
+            print("Lsp for " .. lsp .. " is already installed and running")
             return
         end
     end
