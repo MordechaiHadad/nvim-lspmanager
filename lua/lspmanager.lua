@@ -87,9 +87,6 @@ lspmanager.install = function(lsp)
     if not lsp or lsp == "" then
         local filetype = vim.bo.filetype
 
-        if vim.lsp.buf.server_ready() then
-            error("Server for filetype " .. filetype .. " already working")
-        end
         if vim.api.nvim_buf_get_name(0) == "" or filetype == "" then
             error("No file attached in current buffer, aborting...")
         end
@@ -107,10 +104,7 @@ lspmanager.install = function(lsp)
         if #available_for_filetype == 1 then
             print("installing " .. available_for_filetype[1] .. " for current file type...")
 
-            local path = get_path(available_for_filetype[1])
-            vim.fn.mkdir(path, "p")
-
-            jobs.installation_job(available_for_filetype[1], path, false)
+            lspmanager.install(available_for_filetype[1])
         elseif #available_for_filetype == 0 then
             error("no server found for filetype " .. filetype)
         elseif #available_for_filetype > 1 then
@@ -128,8 +122,11 @@ lspmanager.install = function(lsp)
         error("could not find LSP " .. lsp)
     end
 
-    if vim.lsp.buf.server_ready() then
-        error(lsp .. " Already installed and working")
+    for _, config in pairs(vim.lsp.get_active_clients()) do
+        if config.name == lsp then
+            print("Sussy baka")
+            return
+        end
     end
 
     local path = get_path(lsp)
