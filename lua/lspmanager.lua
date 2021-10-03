@@ -69,6 +69,7 @@ lspmanager.setup_servers = function(is_install, lsp)
             configs[lsp] = config
 
             if require("lspmanager.utilities").is_vscode_lsp(lsp) then
+
                 local capabilities = vim.lsp.protocol.make_client_capabilities()
                 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
