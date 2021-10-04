@@ -1,5 +1,6 @@
 local servers = {
     ["angularls"] = require("lspmanager.servers.angularls"),
+    ["bashls"] = require("lspmanager.servers.bashls"),
     ["clangd"] = require("lspmanager.servers.clangd"),
     ["cssls"] = require("lspmanager.servers.cssls"),
     ["dockerls"] = require("lspmanager.servers.dockerls"),

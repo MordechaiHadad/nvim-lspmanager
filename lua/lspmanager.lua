@@ -102,18 +102,25 @@ lspmanager.install = function(lsp)
         end
 
         if #available_for_filetype == 1 then
-            print("installing " .. available_for_filetype[1] .. " for current file type...")
+            for _, config in pairs(vim.lsp.get_active_clients()) do
+                if config.name == available_for_filetype[1] then
+                    print("Lsp for " .. filetype .. " is already installed and running")
+                    return
+                end
+            end
 
             local path = get_path(available_for_filetype[1])
+            vim.fn.mkdir(path, "p")
 
-            lspmanager.install(available_for_filetype[1])
+            print("installing " .. available_for_filetype[1] .. " for current file type...")
+            jobs.installation_job(available_for_filetype[1], path, false)
         elseif #available_for_filetype == 0 then
             error("no server found for filetype " .. filetype)
         elseif #available_for_filetype > 1 then
             error(
-            "multiple servers found ("
-            .. table.concat(available_for_filetype, "/")
-            .. "), please install one of them"
+                "multiple servers found ("
+                    .. table.concat(available_for_filetype, "/")
+                    .. "), please install one of them"
             )
         end
 
