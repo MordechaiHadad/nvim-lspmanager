@@ -2,6 +2,7 @@ local servers = {
     ["angularls"] = require("lspmanager.servers.angularls"),
     ["bashls"] = require("lspmanager.servers.bashls"),
     ["clangd"] = require("lspmanager.servers.clangd"),
+    ["cmake"] = require("lspmanager.servers.cmake"),
     ["cssls"] = require("lspmanager.servers.cssls"),
     ["dockerls"] = require("lspmanager.servers.dockerls"),
     ["fsautocomplete"] = require("lspmanager.servers.fsautocomplete"),

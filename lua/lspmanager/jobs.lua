@@ -39,7 +39,7 @@ function jobs.installation_job(lsp, path, is_update)
                     vim.fn.delete(path, "rf")
                 else
                     print("Failed to install " .. lsp)
-                    vim.fn.delete(path, "rf")
+                    -- vim.fn.delete(path, "rf")
                 end
             end
         end,
