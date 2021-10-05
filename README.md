@@ -34,23 +34,28 @@ use {
 
 ## Supported language servers
 
-|                    | Language                                       | Language server |
+|                    | Language                                       | Language server     |
 | :----------------- | :--------------------------------------------- | :--------------------------------------------------------------------------- |
-| :white_check_mark: | Angular                                        | `angularls` |
-| :white_check_mark: | C/C++                                          | `clangd` |
-| :white_check_mark: | CSS                                            | `cssls` |
-| :white_check_mark: | Csharp                                         | `omnisharp` |
-| :white_check_mark: | Docker                                         | `dockerls` |
-| :white_check_mark: | Fsharp                                         | `fsautocomplete` |
-| :white_check_mark: | HTML                                           | `html` |
-| :white_check_mark: | JSON                                           | `jsonls` |
-| :white_check_mark: | Javascript/Typescript                          | `tsserver` |
-| :white_check_mark: | Lua                                            | `sumneko_lua` |
-| :white_check_mark: | Python                                         | `pyright` |
-| :white_check_mark: | Rust                                           | `rust_analyser` |
-| :white_check_mark: | Svelte                                         | `sveltels` |
-| :white_check_mark: | Tailwindcss                                    | `tailwindcssls` |
-| :white_check_mark: | Vuejs                                          | `vuels` | 
+| :white_check_mark: | Angular                                        | `angularls`         |
+| :white_check_mark: | Bash                                           | `bashls`            |
+| :white_check_mark: | C/C++                                          | `clangd`            |
+| :white_check_mark: | CMake                                          | `cmake`             |
+| :white_check_mark: | CSS                                            | `cssls`             |
+| :white_check_mark: | Docker                                         | `dockerls`          |
+| :white_check_mark: | FSharp                                         | `fsautocomplete`    |
+| :white_check_mark: | HTML                                           | `html`              |
+| :white_check_mark: | JSON                                           | `jsonls`            |
+| :white_check_mark: | Kotlin                                         | `kotlinls`          |
+| :white_check_mark: | CSharp                                         | `omnisharp`         |
+| :white_check_mark: | Python                                         | `pyright`           |
+| :white_check_mark: | Rust                                           | `rust_analyser`     |
+| :white_check_mark: | Lua                                            | `sumneko_lua`       |
+| :white_check_mark: | Svelte                                         | `sveltels`          |
+| :white_check_mark: | Tailwindcss                                    | `tailwindcssls`     |
+| :white_check_mark: | Terraform                                      | `terraformls`       |
+| :white_check_mark: | Javascript/Typescript                          | `tsserver`          |
+| :white_check_mark: | VimL                                           | `vimls`             |
+| :white_check_mark: | Vuejs                                          | `vuels`             | 
 
 ## Credits
 
