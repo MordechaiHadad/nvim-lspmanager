@@ -60,15 +60,6 @@ local function install_script()
     os=$(uname -s | tr "[:upper:]" "[:lower:]")
     version=$(curl -s "https://api.github.com/repos/sumneko/vscode-lua/releases/latest" | jq -r '.tag_name')
 
-    case $os in
-    linux)
-    platform="Linux"
-    ;;
-    darwin)
-    platform="macOS"
-    ;;
-    esac
-
     curl -L -o "sumneko-lua.vsix" "https://github.com/sumneko/vscode-lua/releases/download/$version/lua-$(echo $version | sed 's/v//').vsix"
     rm -rf sumneko-lua
     unzip sumneko-lua.vsix -d .
