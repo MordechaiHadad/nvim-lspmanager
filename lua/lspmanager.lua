@@ -78,7 +78,6 @@ lspmanager.setup_servers = function(is_install, lsp)
             configs[lsp] = config
 
             if require("lspmanager.utilities").is_vscode_lsp(lsp) then
-
                 local capabilities = vim.lsp.protocol.make_client_capabilities()
                 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -128,9 +127,9 @@ lspmanager.install = function(lsp)
             error("no server found for filetype " .. filetype)
         elseif #available_for_filetype > 1 then
             error(
-            "multiple servers found ("
-            .. table.concat(available_for_filetype, "/")
-            .. "), please install one of them"
+                "multiple servers found ("
+                    .. table.concat(available_for_filetype, "/")
+                    .. "), please install one of them"
             )
         end
 

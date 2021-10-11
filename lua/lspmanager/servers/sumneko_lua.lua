@@ -79,12 +79,12 @@ local function install_script()
 
             echo $version > VERSION
             ]]
-        end
+end
 
-        return vim.tbl_extend("error", config, {
-            install_script = install_script,
+return vim.tbl_extend("error", config, {
+    install_script = install_script,
 
-            update_script = function()
-                return require("lspmanager.installers.manual").update_script("sumneko/vscode-lua")
-            end,
-        })
+    update_script = function()
+        return require("lspmanager.installers.manual").update_script("sumneko/vscode-lua")
+    end,
+})
