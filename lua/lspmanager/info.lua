@@ -7,14 +7,15 @@ local header = {
     [[    |                  _|     ]],
 }
 
-function Info.kill_buf(buf)
-    if vim.api.nvim_buf_is_valid(buf) then
-        vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
-        vim.api.nvim_buf_delete(buf, { force = true })
-    end
-end
+-- function Info.kill_buf(buf)
+    -- if vim.api.nvim_buf_is_valid(buf) then
+        -- vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
+        -- vim.api.nvim_buf_delete(buf, { force = true })
+    -- end
+-- end
 
 local function create_info_window()
+	package.loaded['lspmanager.info'] = nil
     local opts = { noremap = true, silent = true }
     local buf = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_buf_set_keymap(buf, "n", "q", ":q<CR>", opts)
