@@ -41,6 +41,11 @@ lspmanager.setup_servers = function(is_install, lsp)
             if vim.regex([[\.\/]]):match_str(executable) then
                 config.default_config.cmd[1] = path .. "/" .. executable
             end
+
+            if lsp == "sumneko_lua" then
+                local main = config.default_config.cmd[3]
+                config.default_config.cmd[3] = path .. "/" .. main
+            end
         end
         configs[lsp] = config
 
@@ -64,6 +69,10 @@ lspmanager.setup_servers = function(is_install, lsp)
                 local executable = config.default_config.cmd[1]
                 if vim.regex([[\.\/]]):match_str(executable) then
                     config.default_config.cmd[1] = path .. "/" .. executable
+                end
+                if lsp == "sumneko_lua" then
+                    local main = config.default_config.cmd[3]
+                    config.default_config.cmd[3] = path .. "/" .. main
                 end
             end
             configs[lsp] = config
@@ -119,9 +128,9 @@ lspmanager.install = function(lsp)
             error("no server found for filetype " .. filetype)
         elseif #available_for_filetype > 1 then
             error(
-                "multiple servers found ("
-                    .. table.concat(available_for_filetype, "/")
-                    .. "), please install one of them"
+            "multiple servers found ("
+            .. table.concat(available_for_filetype, "/")
+            .. "), please install one of them"
             )
         end
 
