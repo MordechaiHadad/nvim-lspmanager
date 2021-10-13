@@ -6,8 +6,38 @@ local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
 local servers_config = require("lspmanager.config").get()
 
+<<<<<<< HEAD
 lspmanager.setup = function(user_configs)
     servers_config = require("lspmanager.config").set(user_configs or {})
+=======
+local servers_list = {
+    "omnisharp",
+    "fsautocomplete",
+    "svelte",
+    "kotlinls",
+    "rust_analyzer",
+    "vuels",
+    "html",
+    "cmake",
+    "tsserver",
+    "tailwindcss",
+    "bashls",
+    "clangd",
+    "elixirls",
+    "terraformls",
+    "sumneko_lua",
+    "emmet_ls",
+    "cssls",
+    "dockerls",
+    "jsonls",
+    "vimls",
+    "pyright",
+    "angularls",
+    "hls",
+}
+
+lspmanager.setup = function()
+>>>>>>> 7074e37 (Refactor: Loop throught strings need tester)
     lspmanager.setup_servers(false, nil)
 end
 
