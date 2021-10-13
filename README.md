@@ -37,7 +37,7 @@ Resource the current file, and run `:PackerInstall` to install the plugin.
 
 - [vim-plug](https://github.com/junegunn/vim-plug)
 ```vim
-Plug 'MordechaiHadad/nvim-lspmanager' | Plug 'nvim-lua/plenary.nvim'
+Plug 'MordechaiHadad/nvim-lspmanager' | Plug 'neovim/nvim-lspconfig'
 ```
 Resource the current file, and run `:PlugInstall` to install the plugin.
 
