@@ -21,6 +21,7 @@ Make sure you have the following packages installed:
 - `npm`
 - `gzip`
 - `unzip`
+- `pip`
 
 - [Packer](https://github.com/wbthomason/packer.nvim)
 ```lua
