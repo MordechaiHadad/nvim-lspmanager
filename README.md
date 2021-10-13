@@ -64,8 +64,12 @@ EOF
 | :white_check_mark: | CMake                                          | `cmake`             |
 | :white_check_mark: | CSS                                            | `cssls`             |
 | :white_check_mark: | Docker                                         | `dockerls`          |
+| :white_check_mark: | Elixir                                         | `elixirls`          |
+| :white_check_mark: | Emmet                                          | `emmet_ls`          |
 | :white_check_mark: | FSharp                                         | `fsautocomplete`    |
+| :white_check_mark: | Haskell                                        | `hls`               |
 | :white_check_mark: | HTML                                           | `html`              |
+| :white_check_mark: | Java                                           | `jdtls`             |
 | :white_check_mark: | JSON                                           | `jsonls`            |
 | :white_check_mark: | Kotlin                                         | `kotlinls`          |
 | :white_check_mark: | CSharp                                         | `omnisharp`         |
