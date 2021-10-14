@@ -59,10 +59,15 @@ function jobs.update_job(lsp, path) -- NOTE: might add mass update if viable
         on_exit = function(_, exitcode)
             if exitcode == 69 then
                 print(lsp .. " is up to date")
-            elseif exitcode == 70 then -- NOTE: this is just for manual for now i think might refactor this soon
+            elseif exitcode == 70 then
                 jobs.installation_job(lsp, path, true)
             elseif exitcode == 0 then
-                print("Successfully updated " .. lsp) --TODO: refactor this else if stuff makes me feel like yanderedev coding
+                print("Successfully updated " .. lsp)
+            elseif exitcode == 3 then
+                print(
+                    [[Successfully "updated"(sometimes just reinstalled the same version cuz go package manager needs some work) ]]
+                        .. lsp
+                )
             end
         end,
     })

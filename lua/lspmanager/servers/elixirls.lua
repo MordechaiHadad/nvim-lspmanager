@@ -11,7 +11,7 @@ else
     cmd_exec = cmd_exec .. ".sh"
 end
 
-config.default_config.cmd = {cmd_exec}
+config.default_config.cmd = { cmd_exec }
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then

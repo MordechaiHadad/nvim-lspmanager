@@ -8,6 +8,7 @@ local servers = {
     ["elixirls"] = require("lspmanager.servers.elixirls"),
     ["emmet_ls"] = require("lspmanager.servers.emmet_ls"),
     ["fsautocomplete"] = require("lspmanager.servers.fsautocomplete"),
+    ["gopls"] = require("lspmanager.servers.gopls"),
     ["hls"] = require("lspmanager.servers.hls"),
     ["html"] = require("lspmanager.servers.html"),
     -- ["jdtls"] = require("lspmanager.servers.jdtls"),
