@@ -6,6 +6,7 @@ local servers = {
     ["cssls"] = require("lspmanager.servers.cssls"),
     ["dockerls"] = require("lspmanager.servers.dockerls"),
     ["elixirls"] = require("lspmanager.servers.elixirls"),
+    ["elmls"] = require("lspmanager.servers.elmls"),
     ["emmet_ls"] = require("lspmanager.servers.emmet_ls"),
     ["fsautocomplete"] = require("lspmanager.servers.fsautocomplete"),
     ["gopls"] = require("lspmanager.servers.gopls"),
