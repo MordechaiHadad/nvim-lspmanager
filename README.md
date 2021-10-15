@@ -13,7 +13,26 @@ Using pre-made configurations from [nvim-lspconfig](https://github.com/neovim/nv
 
 ## Installation
 #### Dependencies
-Make sure you have [`jq`](https://github.com/stedolan/jq), `curl`, `npm`, `gzip`, and `unzip` installed.
+Make sure you have [`jq`](https://github.com/stedolan/jq), [`curl`](https://github.com/curl/curl), [`npm`](https://github.com/npm/cli), [`gzip`](https://github.com/nicklockwood/GZIP), and [`unzip`]() installed.
+
+##### Install instructions for dependencies
+instructions for jq, curl, npm and gzip are given in their github repo
+
+```bash
+# unzip
+
+# For Arch or arch-based linux distros
+❯ sudo pacman -S unzip
+
+# Debian / Ubuntu based linux distros
+❯ sudo apt install unzip
+
+# MacoS
+❯ brew install unzip
+
+# Windows
+❯ choco install unzip
+```
 
 - [Packer](https://github.com/wbthomason/packer.nvim)
 ```lua
