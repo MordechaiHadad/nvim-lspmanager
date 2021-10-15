@@ -121,7 +121,7 @@ lspmanager.install = function(lsp)
             local path = get_path(available_for_filetype[1])
             vim.fn.mkdir(path, "p")
 
-            print("installing " .. available_for_filetype[1] .. " for current file type...")
+            print("Installing " .. available_for_filetype[1] .. " for current file type...")
             jobs.installation_job(available_for_filetype[1], path, false)
         elseif #available_for_filetype == 0 then
             error("no server found for filetype " .. filetype)
