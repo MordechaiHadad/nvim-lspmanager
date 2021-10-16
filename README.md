@@ -42,7 +42,7 @@ Plug 'MordechaiHadad/nvim-lspmanager' | Plug 'neovim/nvim-lspconfig'
 Resource the current file, and run `:PlugInstall` to install the plugin.
 
 Now you can place this base configuration in your `init.vim` file:
-```lua
+```vim
 lua << EOF
     require('lspmanager').setup()
 EOF
