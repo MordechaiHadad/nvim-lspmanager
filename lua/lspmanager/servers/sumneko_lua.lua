@@ -53,31 +53,32 @@ local function install_script()
     end
     return [[
     if ! command -v jq &> /dev/null
-    then
-        exit 123
-    fi
+        then
+            exit 123
+            fi
 
-    os=$(uname -s | tr "[:upper:]" "[:lower:]")
-    version=$(curl -s "https://api.github.com/repos/sumneko/vscode-lua/releases/latest" | jq -r '.tag_name')
+            os=$(uname -s | tr "[:upper:]" "[:lower:]")
+            version=$(curl -s "https://api.github.com/repos/sumneko/vscode-lua/releases/latest" | jq -r '.tag_name')
 
-    case $os in
-    linux)
-    platform="Linux"
-    ;;
-    darwin)
-    platform="macOS"
-    ;;
-    esac
+            case $os in
+            linux)
+            platform="Linux"
+            ;;
+            darwin)
+            platform="macOS"
+            ;;
+            esac
 
-    curl -L -o "sumneko-lua.vsix" "https://github.com/sumneko/vscode-lua/releases/download/$version/lua-$(echo $version | sed 's/v//').vsix"
-    rm -rf sumneko-lua
-    unzip sumneko-lua.vsix -d .
-    rm sumneko-lua.vsix
 
-    chmod +x extension/server/bin/$platform/lua-language-server
+            curl -L -o "sumneko-lua.vsix" "https://github.com/sumneko/vscode-lua/releases/download/$version/lua-$(echo $version | sed 's/v//').vsix"
+            rm -rf sumneko-lua
+            unzip sumneko-lua.vsix -d .
+            rm sumneko-lua.vsix
 
-    echo $version > VERSION
-    ]]
+            chmod +x extension/server/bin/$platform/lua-language-server
+
+            echo $version > VERSION
+            ]]
 end
 
 return vim.tbl_extend("error", config, {

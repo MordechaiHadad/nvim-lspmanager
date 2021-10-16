@@ -2,7 +2,7 @@ local npm = {}
 
 local os = require("lspmanager.os")
 
-function npm.install_script(args) -- TODO: Change it from string to a table
+function npm.install_script(args)
     if os.get_os() == os.OSes.Windows then
         return [[
         if(-not(Test-Path -Path 'package.json' -PathType Leaf)) {

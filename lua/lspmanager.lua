@@ -41,6 +41,11 @@ lspmanager.setup_servers = function(is_install, lsp)
             if vim.regex([[\.\/]]):match_str(executable) then
                 config.default_config.cmd[1] = path .. "/" .. executable
             end
+
+            if lsp == "sumneko_lua" then
+                local main = config.default_config.cmd[3]
+                config.default_config.cmd[3] = path .. "/" .. main
+            end
         end
         configs[lsp] = config
 
@@ -65,11 +70,14 @@ lspmanager.setup_servers = function(is_install, lsp)
                 if vim.regex([[\.\/]]):match_str(executable) then
                     config.default_config.cmd[1] = path .. "/" .. executable
                 end
+                if lsp == "sumneko_lua" then
+                    local main = config.default_config.cmd[3]
+                    config.default_config.cmd[3] = path .. "/" .. main
+                end
             end
             configs[lsp] = config
 
             if require("lspmanager.utilities").is_vscode_lsp(lsp) then
-
                 local capabilities = vim.lsp.protocol.make_client_capabilities()
                 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -103,16 +111,25 @@ lspmanager.install = function(lsp)
         end
 
         if #available_for_filetype == 1 then
-            print("installing " .. available_for_filetype[1] .. " for current file type...")
+            for _, config in pairs(vim.lsp.get_active_clients()) do
+                if config.name == available_for_filetype[1] then
+                    print("Lsp for " .. filetype .. " is already installed and running")
+                    return
+                end
+            end
 
-            lspmanager.install(available_for_filetype[1])
+            local path = get_path(available_for_filetype[1])
+            vim.fn.mkdir(path, "p")
+
+            print("Installing " .. available_for_filetype[1] .. " for current file type...")
+            jobs.installation_job(available_for_filetype[1], path, false)
         elseif #available_for_filetype == 0 then
             error("no server found for filetype " .. filetype)
         elseif #available_for_filetype > 1 then
             error(
-            "multiple servers found ("
-            .. table.concat(available_for_filetype, "/")
-            .. "), please install one of them"
+                "multiple servers found ("
+                    .. table.concat(available_for_filetype, "/")
+                    .. "), please install one of them"
             )
         end
 
@@ -172,6 +189,8 @@ lspmanager.update = function(lsp)
     end
 
     local path = get_path(lsp)
+
+    print("Checking for " .. lsp .. " updates..")
 
     jobs.update_job(lsp, path)
 end
