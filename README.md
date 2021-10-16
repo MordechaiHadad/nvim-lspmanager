@@ -54,6 +54,12 @@ EOF
 - `:LspUninstall ...:` Uninstall an installed language server
 - `:LspUpdate ...`: Update an installed language server. (`:LspUpdate all` will update all installed ones)
 
+### Telescope picker
+
+nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) to install, uninstall and update language servers.
+
+- `:Telescope lspmanager` Is used for selecting either one of these options: `lsp_install`, `lsp_uninstall`, `lsp_update`
+
 ## Supported language servers
 
 |                    | Language                                       | Language server     |
