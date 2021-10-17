@@ -76,10 +76,12 @@ local function install_script()
     ]]
 end
 
-return vim.tbl_extend("error", config, {
+return {
+    config = config,
+
     install_script = install_script,
 
     update_script = function()
         return installers.manual.update_script("clangd/clangd")
     end,
-})
+}

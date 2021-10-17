@@ -4,7 +4,9 @@ local installer = require("lspmanager.installers.dotnet")
 
 config.default_config.cmd[2] = "fsautocomplete"
 
-return vim.tbl_extend("error", config, {
+return {
+    config = config,
+
     install_script = function()
         return installer.install_script(lsp_name)
     end,
@@ -12,4 +14,4 @@ return vim.tbl_extend("error", config, {
     update_script = function()
         return installer.update_script(lsp_name)
     end,
-})
+}
