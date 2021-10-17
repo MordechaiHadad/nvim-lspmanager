@@ -31,6 +31,46 @@ local install = function(opts)
     }):find()
 end
 
+local uninstall = function(opts)
+    pickers.new(opts, {
+        prompt_title = "servers",
+        finder = finders.new_table({
+            results = manager.installed_servers(),
+        }),
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function(prompt_bufnr, map)
+            actions.select_default:replace(function()
+                actions.close(prompt_bufnr)
+
+                local lsp = action_state.get_selected_entry()[1]
+
+                manager.uninstall(lsp)
+            end)
+            return true
+        end,
+    }):find()
+end
+
+local update = function(opts)
+    pickers.new(opts, {
+        prompt_title = "servers",
+        finder = finders.new_table({
+            results = manager.installed_servers({ insert_key_all = true }),
+        }),
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function(prompt_bufnr, map)
+            actions.select_default:replace(function()
+                actions.close(prompt_bufnr)
+
+                local lsp = action_state.get_selected_entry()[1]
+
+                manager.update(lsp)
+            end)
+            return true
+        end,
+    }):find()
+end
+
 return telescope.register_extension({
-    exports = { lspmanager = install },
+    exports = { install_lsp = install, uninstall_lsp = uninstall, update_lsp = update },
 })

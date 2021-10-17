@@ -1,21 +1,15 @@
 local lsp_name = "fsautocomplete"
 local config = require("lspmanager.utilities").get_config(lsp_name)
+local installer = require("lspmanager.installers.dotnet")
 
 config.default_config.cmd[2] = "fsautocomplete"
 
-local function install_script()
-    return [[
-    dotnet new tool-manifest
-    dotnet tool install fsautocomplete
-    ]]
-end
-
 return vim.tbl_extend("error", config, {
-    install_script = install_script,
+    install_script = function()
+        return installer.install_script(lsp_name)
+    end,
 
     update_script = function()
-        return [[
-        dotnet tool update fsautocomplete
-        ]]
+        return installer.update_script(lsp_name)
     end,
 })
