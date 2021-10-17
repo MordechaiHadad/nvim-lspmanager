@@ -19,6 +19,19 @@ lspmanager.available_servers = function()
     return vim.tbl_keys(servers)
 end
 
+lspmanager.suggested_servers = function (filetype)
+    local available = lspmanager.available_servers()
+    local available_for_filetype = {}
+    for lsp, config in pairs(servers) do
+        if vim.tbl_contains(available, lsp) then
+            if vim.tbl_contains(config.default_config.filetypes, filetype) then
+                table.insert(available_for_filetype, lsp)
+            end
+        end
+    end
+    return available_for_filetype
+end
+
 lspmanager.installed_servers = function(opts)
     opts = opts or {}
     local res = {}
@@ -105,36 +118,28 @@ lspmanager.install = function(lsp)
             error("No file attached in current buffer, aborting...")
         end
 
-        local available = lspmanager.available_servers()
-        local available_for_filetype = {}
-        for lsp, config in pairs(servers) do
-            if vim.tbl_contains(available, lsp) then
-                if vim.tbl_contains(config.default_config.filetypes, filetype) then
-                    table.insert(available_for_filetype, lsp)
-                end
-            end
-        end
+        local suggested_servers = lspmanager.suggested_servers(filetype)
 
-        if #available_for_filetype == 1 then
+        if #suggested_servers == 1 then
             for _, config in pairs(vim.lsp.get_active_clients()) do
-                if config.name == available_for_filetype[1] then
+                if config.name == suggested_servers[1] then
                     print("Lsp for " .. filetype .. " is already installed and running")
                     return
                 end
             end
 
-            local path = get_path(available_for_filetype[1])
+            local path = get_path(suggested_servers[1])
             vim.fn.mkdir(path, "p")
 
-            print("Installing " .. available_for_filetype[1] .. " for current file type...")
-            jobs.installation_job(available_for_filetype[1], path, false)
-        elseif #available_for_filetype == 0 then
+            print("Installing " .. suggested_servers[1] .. " for current file type...")
+            jobs.installation_job(suggested_servers[1], path, false)
+        elseif #suggested_servers == 0 then
             error("no server found for filetype " .. filetype)
-        elseif #available_for_filetype > 1 then
+        elseif #suggested_servers > 1 then
             error(
-                "multiple servers found ("
-                    .. table.concat(available_for_filetype, "/")
-                    .. "), please install one of them"
+            "multiple servers found ("
+            .. table.concat(suggested_servers, "/")
+            .. "), please install one of them"
             )
         end
 
