@@ -11,7 +11,9 @@ end
 
 config.default_config.cmd[1] = cmd_exec
 
-return vim.tbl_extend("error", config, {
+return {
+    config = config,
+
     install_script = function()
         return installers.npm.install_script({ "vscode-langservers-extracted" })
     end,
@@ -19,4 +21,4 @@ return vim.tbl_extend("error", config, {
     update_script = function()
         return installers.npm.update_script()
     end,
-})
+}

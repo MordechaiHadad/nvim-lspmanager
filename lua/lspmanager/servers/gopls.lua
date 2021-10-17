@@ -13,7 +13,9 @@ end
 
 config.default_config.cmd[1] = cmd_exec
 
-return vim.tbl_extend("error", config, {
+return {
+    config = config,
+
     install_script = function()
         return installers.go.install_script(pkgs)
     end,
@@ -21,4 +23,4 @@ return vim.tbl_extend("error", config, {
     update_script = function()
         return installers.go.update_script(pkgs)
     end,
-})
+}

@@ -19,13 +19,13 @@ lspmanager.available_servers = function()
     return vim.tbl_keys(servers)
 end
 
-lspmanager.suggested_servers = function (filetype)
+lspmanager.suggested_servers = function(filetype)
     local available = lspmanager.available_servers()
     local available_for_filetype = {}
-    for lsp, config in pairs(servers) do
-        if vim.tbl_contains(available, lsp) then
-            if vim.tbl_contains(config.default_config.filetypes, filetype) then
-                table.insert(available_for_filetype, lsp)
+    for lsp_name, server in pairs(servers) do
+        if vim.tbl_contains(available, lsp_name) then
+            if vim.tbl_contains(server.config.default_config.filetypes, filetype) then
+                table.insert(available_for_filetype, lsp_name)
             end
         end
     end
@@ -47,7 +47,7 @@ end
 
 lspmanager.setup_servers = function(is_install, lsp)
     if is_install then
-        local server_config = servers[lsp]
+        local server_config = servers[lsp].config
         local path = get_path(lsp)
 
         local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
@@ -78,32 +78,32 @@ lspmanager.setup_servers = function(is_install, lsp)
         end
         return
     end
-    for lsp, server_config in pairs(servers) do
-        local path = get_path(lsp)
-        if lspmanager.is_lsp_installed(lsp) == 1 and not configs[lsp] then
-            local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
+    for lsp_name, server in pairs(servers) do
+        local path = get_path(lsp_name)
+        if lspmanager.is_lsp_installed(lsp_name) == 1 and not configs[lsp_name] then
+            local config = vim.tbl_deep_extend("keep", server.config, { default_config = { cmd_cwd = path } })
             if config.default_config.cmd then
                 local executable = config.default_config.cmd[1]
                 if vim.regex([[\.\/]]):match_str(executable) then
                     config.default_config.cmd[1] = path .. "/" .. executable
                 end
-                if lsp == "sumneko_lua" then
+                if lsp_name == "sumneko_lua" then
                     local main = config.default_config.cmd[3]
                     config.default_config.cmd[3] = path .. "/" .. main
                 end
             end
             config = vim.tbl_deep_extend("force", config, servers_config[lsp])
-            configs[lsp] = config
+            configs[lsp_name] = config
 
-            if require("lspmanager.utilities").is_vscode_lsp(lsp) then
+            if require("lspmanager.utilities").is_vscode_lsp(lsp_name) then
                 local capabilities = vim.lsp.protocol.make_client_capabilities()
                 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-                require("lspconfig")[lsp].setup({
+                require("lspconfig")[lsp_name].setup({
                     capabilities = capabilities,
                 })
             else
-                require("lspconfig")[lsp].setup({})
+                require("lspconfig")[lsp_name].setup({})
             end
         end
     end
@@ -136,11 +136,7 @@ lspmanager.install = function(lsp)
         elseif #suggested_servers == 0 then
             error("no server found for filetype " .. filetype)
         elseif #suggested_servers > 1 then
-            error(
-            "multiple servers found ("
-            .. table.concat(suggested_servers, "/")
-            .. "), please install one of them"
-            )
+            error("multiple servers found (" .. table.concat(suggested_servers, "/") .. "), please install one of them")
         end
 
         return

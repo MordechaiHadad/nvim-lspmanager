@@ -97,10 +97,12 @@ local function install_script()
             ]]
 end
 
-return vim.tbl_extend("error", config, {
+return {
+    config = config,
+
     install_script = install_script,
 
     update_script = function()
         return require("lspmanager.installers.manual").update_script("rust-analyzer/rust-analyzer")
     end,
-})
+}

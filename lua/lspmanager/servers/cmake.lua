@@ -11,8 +11,10 @@ end
 
 config.default_config.cmd[1] = cmd_exec
 
-return vim.tbl_extend("error", config, {
+return {
+    config = config,
+
     install_script = function()
         return installers.pip.install_script({ "cmake-language-server" })
     end,
-})
+}
