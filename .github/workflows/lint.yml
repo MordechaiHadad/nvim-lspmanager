@@ -2,7 +2,7 @@ name: lint
 
 on:
   push:
-    branches: [main, develop]
+    branches: [master, dev]
   pull_request:
     types: [opened, synchronize]
 
