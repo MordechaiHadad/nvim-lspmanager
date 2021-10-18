@@ -63,7 +63,7 @@ lspmanager.setup_servers = function(is_install, lsp)
             end
         end
 
-        config = vim.tbl_deep_extend("force", config, servers_config[lsp])
+        config = vim.tbl_deep_extend("force", config, servers_config[lsp_name])
         configs[lsp] = config
 
         if require("lspmanager.utilities").is_vscode_lsp(lsp) then
@@ -92,7 +92,7 @@ lspmanager.setup_servers = function(is_install, lsp)
                     config.default_config.cmd[3] = path .. "/" .. main
                 end
             end
-            config = vim.tbl_deep_extend("force", config, servers_config[lsp])
+            config = vim.tbl_deep_extend("force", config, servers_config[lsp_name])
             configs[lsp_name] = config
 
             if require("lspmanager.utilities").is_vscode_lsp(lsp_name) then
