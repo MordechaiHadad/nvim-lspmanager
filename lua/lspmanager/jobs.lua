@@ -2,6 +2,7 @@ local jobs = {}
 
 local servers = require("lspmanager.servers")
 local os = require("lspmanager.os")
+local lspmanager = require("lspmanager")
 
 function jobs.installation_job(lsp, path, is_update)
     local shell = ""
