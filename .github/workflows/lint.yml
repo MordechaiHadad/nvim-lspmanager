@@ -1,0 +1,18 @@
+name: lint
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  luacheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: nebularg/actions-luacheck@v1.1.0
+        with:
+          files: '.'
+          config: 'https://raw.githubusercontent.com/NTBBloodbath/doom-nvim/develop/.luacheckrc'
+          annotate: 'error'
