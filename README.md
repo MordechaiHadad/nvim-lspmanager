@@ -14,7 +14,7 @@ Using pre-made configurations from [nvim-lspconfig](https://github.com/neovim/nv
 ## :wrench: Installation
 Make sure to use Neovim version 0.5.x or higher.
 #### Dependencies
-Make sure you have the following packages installed:
+Make sure you have the following packages installed (some dependencies are responsible for others i.e dotnet LSPs download via `dotnet`):
 
 
 <details>
@@ -74,7 +74,7 @@ EOF
 
 nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) to install, uninstall and update language servers.
 
-- `:Telescope lspmanager` Is used for selecting either one of these options: `lsp_install`, `lsp_uninstall`, `lsp_update`
+- `:Telescope lspmanager` is used for selecting either one of these options: `lsp_install`, `lsp_uninstall`, `lsp_update`
 
 ## Supported language servers
 
