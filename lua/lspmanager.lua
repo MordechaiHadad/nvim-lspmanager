@@ -92,6 +92,7 @@ lspmanager.setup_servers = function(is_install, lsp)
                     config.default_config.cmd[3] = path .. "/" .. main
                 end
             end
+
             config = vim.tbl_deep_extend("force", config, servers_config[lsp_name])
             configs[lsp_name] = config
 

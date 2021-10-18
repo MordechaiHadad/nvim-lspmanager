@@ -3,9 +3,12 @@ local config = {}
 
 local configurations = {
   angularls = require("lspmanager.servers.angularls"),
+  bashls = require("lspmanager.servers.bashls"),
   clangd = require("lspmanager.servers.clangd"),
+  cmake = require("lspmanager.servers.cmake"),
   cssls = require("lspmanager.servers.cssls"),
   dockerls = require("lspmanager.servers.dockerls"),
+  emmet_ls = require("lspmanager.servers.emmet_ls"),
   fsautocomplete = require("lspmanager.servers.fsautocomplete"),
   html = require("lspmanager.servers.html"),
   jdtls = require("lspmanager.servers.jdtls"),
