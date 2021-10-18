@@ -64,7 +64,7 @@ lua << EOF
 EOF
 ```
 
-## Usage
+## :question: Usage
 
 - `:LspInstall ...`: Installs a supported language server
 - `:LspUninstall ...:` Uninstall an installed language server
@@ -76,7 +76,7 @@ nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/te
 
 - `:Telescope lspmanager` is used for selecting either one of these options: `lsp_install`, `lsp_uninstall`, `lsp_update`
 
-## Supported language servers
+## :white_check_mark: Supported language servers
 
 |                    | Language                                       | Language server     |
 | :----------------- | :--------------------------------------------- | :--------------------------------------------------------------------------- |
@@ -104,6 +104,6 @@ nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/te
 | :white_check_mark: | VimL                                           | `vimls`             |
 | :white_check_mark: | Vuejs                                          | `vuels`             | 
 
-## Credits
+## :heart: Credits
 
 - Big thanks to [lspinstall](https://github.com/kabouzeid/nvim-lspinstall) for helping me save time for some scripts
