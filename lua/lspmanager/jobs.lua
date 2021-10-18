@@ -2,7 +2,6 @@ local jobs = {}
 
 local servers = require("lspmanager.servers")
 local os = require("lspmanager.os")
-local lspmanager = require("lspmanager")
 
 function jobs.installation_job(lsp, path, is_update)
     local shell = ""
@@ -31,7 +30,7 @@ function jobs.installation_job(lsp, path, is_update)
 
                     vim.schedule(function()
                         if vim.api.nvim_buf_get_name(0) ~= "" then
-                            lspmanager.setup_servers(true, lsp)
+                            require("lspmanager").setup_servers(true, lsp)
                             vim.cmd("bufdo e")
                         end
                     end)
