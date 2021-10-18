@@ -14,5 +14,5 @@ jobs:
       - uses: nebularg/actions-luacheck@v1.1.0
         with:
           files: '.'
-          config: 'https://raw.githubusercontent.com/NTBBloodbath/doom-nvim/develop/.luacheckrc'
+          config: 'https://raw.githubusercontent.com/NTBBloodbath/nvim-lspmanager/feat/add-servers-config-to-setup/.luacheckrc'
           annotate: 'error'
