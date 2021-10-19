@@ -5,6 +5,32 @@ local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
 
+local servers_list = {
+    "omnisharp",
+    "fsautocomplete",
+    "svelte",
+    "kotlinls",
+    "rust_analyzer",
+    "vuels",
+    "html",
+    "cmake",
+    "tsserver",
+    "tailwindcss",
+    "bashls",
+    "clangd",
+    "elixirls",
+    "terraformls",
+    "sumneko_lua",
+    "emmet_ls",
+    "cssls",
+    "dockerls",
+    "jsonls",
+    "vimls",
+    "pyright",
+    "angularls",
+    "hls",
+}
+
 lspmanager.setup = function()
     lspmanager.setup_servers(false, nil)
 end
@@ -74,10 +100,12 @@ lspmanager.setup_servers = function(is_install, lsp)
         end
         return
     end
-    for lsp_name, server in pairs(servers) do
-        local path = get_path(lsp_name)
-        if lspmanager.is_lsp_installed(lsp_name) == 1 and not configs[lsp_name] then
-            local config = vim.tbl_deep_extend("keep", server.config, { default_config = { cmd_cwd = path } })
+
+    for _, lsp in pairs(servers_list) do
+        local path = get_path(lsp)
+        local server_config = servers[lsp]
+        if lspmanager.is_lsp_installed(lsp) == 1 and not configs[lsp] then
+            local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
             if config.default_config.cmd then
                 local executable = config.default_config.cmd[1]
                 if vim.regex([[\.\/]]):match_str(executable) then
