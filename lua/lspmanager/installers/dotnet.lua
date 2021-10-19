@@ -6,8 +6,8 @@ function dotnet.install_script(name)
     if os.get_os() == os.OSes.Windows then
         return [[
         $lsp = "]] .. name .. '"\n' .. [[
-        Invoke-Expression 'dotnet new tool-manifest'
-        Invoke-Expression 'dotnet tool install $($lsp)'
+        dotnet new tool-manifest
+        dotnet tool install $($lsp)
 
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 

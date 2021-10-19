@@ -6,9 +6,9 @@ function pip.install_script(args) -- TODO: Change it from string to a table
     if os.get_os() == os.OSes.Windows then
         return [[
 
-        Invoke-Expression 'python -m venv ./venv'
-        Invoke-Expression '.\venv\Scripts\pip3.exe install -U pip'
-        Invoke-Expression '.\venv\Scripts\pip3.exe install -U ]] .. table.concat(args, " ") .. "'" ..
+        python -m venv ./venv
+        .\venv\Scripts\pip3.exe install -U pip
+        .\venv\Scripts\pip3.exe install -U ]] .. table.concat(args, " ") ..
         [[ 
 
         exit $LASTEXITCODE
