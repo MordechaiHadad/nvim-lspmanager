@@ -11,14 +11,16 @@ end
 
 config.default_config.cmd[1] = cmd_exec
 
+local args = { "cmake-language-server" }
+
 return {
     config = config,
 
     install_script = function()
-        return pip.install_script({ "cmake-language-server" })
+        return pip.install_script(args)
     end,
 
     update_script = function ()
-        return pip.update_script({"cmake-language-server"})
+        return pip.update_script(args)
     end
 }
