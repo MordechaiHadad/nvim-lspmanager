@@ -70,7 +70,7 @@ local function install_script()
     unzip clangd.zip -d .
 
     rm clangd.zip
-    mv clangd_* .
+    mv clangd_*/* .
 
     echo $version > VERSION
     ]]
