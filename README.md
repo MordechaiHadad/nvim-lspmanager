@@ -83,6 +83,7 @@ nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/te
 | :white_check_mark: | Angular                                        | `angularls`         |
 | :white_check_mark: | Bash                                           | `bashls`            |
 | :white_check_mark: | C/C++                                          | `clangd`            |
+| :white_check_mark: | Clojure                                        | `clojure_lsp`       |
 | :white_check_mark: | CMake                                          | `cmake`             |
 | :white_check_mark: | CSS                                            | `cssls`             |
 | :white_check_mark: | Docker                                         | `dockerls`          |
