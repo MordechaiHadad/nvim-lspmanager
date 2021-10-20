@@ -16,6 +16,7 @@ Make sure to use Neovim version 0.5.x or higher.
 #### Dependencies
 Make sure you have the following packages installed (some dependencies are responsible for others i.e dotnet LSPs download via `dotnet`):
 
+<<<<<<< HEAD
 
 <details>
     <summary>Unix</summary>
@@ -28,15 +29,37 @@ Make sure you have the following packages installed (some dependencies are respo
 - [`pip`](https://github.com/pypa/pip)
 - [`dotnet`](https://github.com/microsoft/dotnet)
 - [`go`](https://github.com/golang/go)
+=======
+<details>
+    <summary>Unix</summary>
+
+    - [`jq`](https://github.com/stedolan/jq)
+    - [`curl`](https://github.com/curl/curl)
+    - [`npm`](https://github.com/npm/cli)
+    - [`gzip`](https://github.com/nicklockwood/GZIP)
+    - `unzip`
+    - [`pip`](https://github.com/pypa/pip)
+    - [`dotnet`](https://github.com/microsoft/dotnet)
+    - [`go`](https://github.com/golang/go)
+
+>>>>>>> 260ef2d0824008e1dd258ab2f44ff77761dcb10b
 </details>
 
 <details>
     <summary>Windows</summary>
 
+<<<<<<< HEAD
 - [`npm`](https://github.com/npm/cli)
 - [`dotnet`](https://github.com/microsoft/dotnet)
 - [`pip`](https://github.com/pypa/pip)
 - [`go`](https://github.com/golang/go)
+=======
+    - [`npm`](https://github.com/npm/cli)
+    - [`dotnet`](https://github.com/microsoft/dotnet)
+    - [`pip`](https://github.com/pypa/pip)
+    - [`go`](https://github.com/golang/go)
+
+>>>>>>> 260ef2d0824008e1dd258ab2f44ff77761dcb10b
 </details>
 
 - [Packer](https://github.com/wbthomason/packer.nvim)

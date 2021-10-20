@@ -1,7 +1,9 @@
 local servers = {
+    -- ["jdtls"] = require("lspmanager.servers.jdtls"),
     ["angularls"] = require("lspmanager.servers.angularls"),
     ["bashls"] = require("lspmanager.servers.bashls"),
     ["clangd"] = require("lspmanager.servers.clangd"),
+    ["clojure_lsp"] = require("lspmanager.servers.clojure_lsp"),
     ["cmake"] = require("lspmanager.servers.cmake"),
     ["cssls"] = require("lspmanager.servers.cssls"),
     ["dockerls"] = require("lspmanager.servers.dockerls"),
@@ -12,7 +14,6 @@ local servers = {
     ["gopls"] = require("lspmanager.servers.gopls"),
     ["hls"] = require("lspmanager.servers.hls"),
     ["html"] = require("lspmanager.servers.html"),
-    -- ["jdtls"] = require("lspmanager.servers.jdtls"),
     ["jsonls"] = require("lspmanager.servers.jsonls"),
     ["kotlinls"] = require("lspmanager.servers.kotlinls"),
     ["omnisharp"] = require("lspmanager.servers.omnisharp"),
