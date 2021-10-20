@@ -26,6 +26,7 @@ local servers = {
     ["tsserver"] = require("lspmanager.servers.tsserver"),
     ["vimls"] = require("lspmanager.servers.vimls"),
     ["vuels"] = require("lspmanager.servers.vuels"),
+    ["puppet"] = require("lspmanager.servers.puppet"),
 }
 
 return servers

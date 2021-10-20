@@ -63,6 +63,7 @@ utilities.servers_list = {
     "tsserver",
     "vimls",
     "vuels",
+    "puppet",
 }
 
 return utilities
