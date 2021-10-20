@@ -193,6 +193,8 @@ lspmanager.update = function(lsp)
 
     local path = get_path(lsp)
 
+    print("Looking for " .. lsp .. " updates...")
+
     jobs.update_job(lsp, path)
 end
 
