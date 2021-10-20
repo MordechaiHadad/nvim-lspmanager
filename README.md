@@ -14,8 +14,22 @@ Using pre-made configurations from [nvim-lspconfig](https://github.com/neovim/nv
 ## :wrench: Installation
 Make sure to use Neovim version 0.5.x or higher.
 #### Dependencies
-Make sure you have the following packages installed:
+Make sure you have the following packages installed (some dependencies are responsible for others i.e dotnet LSPs download via `dotnet`):
 
+<<<<<<< HEAD
+
+<details>
+    <summary>Unix</summary>
+
+- [`jq`](https://github.com/stedolan/jq)
+- [`curl`](https://github.com/curl/curl)
+- [`npm`](https://github.com/npm/cli)
+- [`gzip`](https://github.com/nicklockwood/GZIP)
+- `unzip`
+- [`pip`](https://github.com/pypa/pip)
+- [`dotnet`](https://github.com/microsoft/dotnet)
+- [`go`](https://github.com/golang/go)
+=======
 <details>
     <summary>Unix</summary>
 
@@ -28,16 +42,24 @@ Make sure you have the following packages installed:
     - [`dotnet`](https://github.com/microsoft/dotnet)
     - [`go`](https://github.com/golang/go)
 
+>>>>>>> 260ef2d0824008e1dd258ab2f44ff77761dcb10b
 </details>
 
 <details>
     <summary>Windows</summary>
 
+<<<<<<< HEAD
+- [`npm`](https://github.com/npm/cli)
+- [`dotnet`](https://github.com/microsoft/dotnet)
+- [`pip`](https://github.com/pypa/pip)
+- [`go`](https://github.com/golang/go)
+=======
     - [`npm`](https://github.com/npm/cli)
     - [`dotnet`](https://github.com/microsoft/dotnet)
     - [`pip`](https://github.com/pypa/pip)
     - [`go`](https://github.com/golang/go)
 
+>>>>>>> 260ef2d0824008e1dd258ab2f44ff77761dcb10b
 </details>
 
 - [Packer](https://github.com/wbthomason/packer.nvim)
@@ -65,7 +87,7 @@ lua << EOF
 EOF
 ```
 
-## Usage
+## :question: Usage
 
 - `:LspInstall ...`: Installs a supported language server
 - `:LspUninstall ...:` Uninstall an installed language server
@@ -75,15 +97,16 @@ EOF
 
 nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) to install, uninstall and update language servers.
 
-- `:Telescope lspmanager` Is used for selecting either one of these options: `lsp_install`, `lsp_uninstall`, `lsp_update`
+- `:Telescope lspmanager` is used for selecting either one of these options: `lsp_install`, `lsp_uninstall`, `lsp_update`
 
-## Supported language servers
+## :white_check_mark: Supported language servers
 
 |                    | Language                                       | Language server     |
 | :----------------- | :--------------------------------------------- | :--------------------------------------------------------------------------- |
 | :white_check_mark: | Angular                                        | `angularls`         |
 | :white_check_mark: | Bash                                           | `bashls`            |
 | :white_check_mark: | C/C++                                          | `clangd`            |
+| :white_check_mark: | Clojure                                        | `clojure_lsp`       |
 | :white_check_mark: | CMake                                          | `cmake`             |
 | :white_check_mark: | CSS                                            | `cssls`             |
 | :white_check_mark: | Docker                                         | `dockerls`          |
@@ -105,6 +128,6 @@ nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/te
 | :white_check_mark: | VimL                                           | `vimls`             |
 | :white_check_mark: | Vuejs                                          | `vuels`             | 
 
-## Credits
+## :heart: Credits
 
 - Big thanks to [lspinstall](https://github.com/kabouzeid/nvim-lspinstall) for helping me save time for some scripts
