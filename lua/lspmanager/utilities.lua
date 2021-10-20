@@ -62,8 +62,10 @@ utilities.servers_list = {
     "svelte",
     "tailwindcss",
     "terraformls",
+    "texlab",
     "tsserver",
     "vimls",
+    "volar",
     "vuels",
 }
 

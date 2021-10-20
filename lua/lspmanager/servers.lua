@@ -25,8 +25,10 @@ local servers = {
     ["svelte"] = require("lspmanager.servers.svelte"),
     ["tailwindcss"] = require("lspmanager.servers.tailwindcss"),
     ["terraformls"] = require("lspmanager.servers.terraformls"),
+    ["texlab"] = require("lspmanager.servers.texlab"),
     ["tsserver"] = require("lspmanager.servers.tsserver"),
     ["vimls"] = require("lspmanager.servers.vimls"),
+    ["volar"]   = require("lspmanager.servers.volar"),
     ["vuels"] = require("lspmanager.servers.vuels"),
 }
 
