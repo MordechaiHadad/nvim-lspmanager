@@ -1,14 +1,17 @@
-local lsp_name = "terraformls"
+local lsp_name = "elixirls"
 local config = require("lspmanager.utilities").get_config(lsp_name)
+local installers = require("lspmanager.installers")
 local os = require("lspmanager.os")
 
-local cmd_exec = "./terraform-ls"
+local cmd_exec = "./language_server"
 
-if os.get_os() == os.OSes.Windows then
-    cmd_exec = cmd_exec .. ".exe"
+if os.get_os == os.OSes.Windows then
+    cmd_exec = cmd_exec .. ".bat"
+else
+    cmd_exec = cmd_exec .. ".sh"
 end
 
-config.default_config.cmd[1] = cmd_exec
+config.default_config.cmd = { cmd_exec }
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then
@@ -16,26 +19,26 @@ local function install_script()
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
         function get_latest_version() {
-            $response = invoke-restmethod -uri "https://api.github.com/repos/hashicorp/terraform-ls/releases/latest"
+            $response = Invoke-RestMethod -Uri "https://api.github.com/repos/elixir-lsp/elixir-ls/releases/latest"
             return $response.tag_name
         }
 
         $version = get_latest_version
-        $otherversion = $version.Trim("v")
-
-        $url = "https://github.com/hashicorp/terraform-ls/releases/download/$($version)/terraform-ls_$($otherversion)_windows_amd64.zip"
-        $out = "terraformls.zip"
+        $url = "https://github.com/elixir-lsp/elixir-ls/releases/download/$($version)/elixir-ls.zip"
+        $out = "elixir-ls.zip"
         
         if (Test-Path -Path Get-Location) {
             Remove-Item Get-Location -Force -Recurse
         }
+        
         Invoke-WebRequest -Uri $url -OutFile $out
         
         Add-Type -AssemblyName System.IO.Compression.FileSystem
         [System.IO.Compression.ZipFile]::ExtractToDirectory($out, ".")
+        
+        Remove-Item $out
 
         Out-File -FilePath VERSION -Encoding string -InputObject "$($version)"
-        Remove-Item $out
         ]]
     end
     return [[
@@ -45,20 +48,12 @@ local function install_script()
     fi
 
     os=$(uname -s | tr "[:upper:]" "[:lower:]")
-    version=$(curl -s "https://api.github.com/repos/hashicorp/terraform-ls/releases/latest" | jq -r '.tag_name')
+    version=$(curl -s "https://api.github.com/repos/elixir-lsp/elixir-ls/releases/latest" | jq -r '.tag_name')
 
-    case $os in
-    linux)
-    platform="linux_amd64"
-    ;;
-    darwin)
-    platform="darwin_amd64"
-    ;;
-    esac
+    curl -L -o "elixir-ls.zip" "https://github.com/elixir-lsp/elixir-ls/releases/download/$version/elixir-ls.zip"
+    unzip elixir-ls.zip
 
-    curl -L -o "terraformls.zip" https://github.com/hashicorp/terraform-ls/releases/download/$version/terraform-ls_$(echo $version | sed 's/v//')_$platform.zip
-    unzip terraformls.zip
-    rm terraformls.zip
+    rm elixir-ls.zip
 
     echo $version > VERSION
     ]]
@@ -70,6 +65,6 @@ return {
     install_script = install_script,
 
     update_script = function()
-        return require("lspmanager.installers.manual").update_script("hashicorp/terraform-ls")
+        return installers.manual.update_script("elixir-lsp/elixir-ls")
     end,
 }

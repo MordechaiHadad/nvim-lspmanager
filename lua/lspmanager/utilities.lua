@@ -38,4 +38,35 @@ function utilities.is_vscode_lsp(lsp)
     return false
 end
 
+utilities.servers_list = {
+    "angularls",
+    "bashls",
+    "clangd",
+    "clojure_lsp",
+    "cmake",
+    "cssls",
+    "dockerls",
+    "elixirls",
+    "emmet_ls",
+    "fsautocomplete",
+    "hls",
+    "html",
+    "jsonls",
+    "kotlinls",
+    "omnisharp",
+    "purescriptls",
+    "pyright",
+    "rust_analyzer",
+    "solang",
+    "sumneko_lua",
+    "svelte",
+    "tailwindcss",
+    "terraformls",
+    "texlab",
+    "tsserver",
+    "vimls",
+    "volar",
+    "vuels",
+}
+
 return utilities

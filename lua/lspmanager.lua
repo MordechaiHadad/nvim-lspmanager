@@ -5,6 +5,8 @@ local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
 
+local servers_list = require("lspmanager.utilities").servers_list
+
 lspmanager.setup = function()
     lspmanager.setup_servers(false, nil)
 end
@@ -32,7 +34,7 @@ end
 
 lspmanager.setup_servers = function(is_install, lsp)
     if is_install then
-        local server_config = servers[lsp]
+        local server_config = servers[lsp].config
         local path = get_path(lsp)
 
         local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
@@ -61,8 +63,9 @@ lspmanager.setup_servers = function(is_install, lsp)
         end
         return
     end
-    for lsp, server_config in pairs(servers) do
+    for _, lsp in pairs(servers_list) do
         local path = get_path(lsp)
+        local server_config = servers[lsp].config
         if lspmanager.is_lsp_installed(lsp) == 1 and not configs[lsp] then
             local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
             if config.default_config.cmd then
@@ -78,7 +81,6 @@ lspmanager.setup_servers = function(is_install, lsp)
             configs[lsp] = config
 
             if require("lspmanager.utilities").is_vscode_lsp(lsp) then
-
                 local capabilities = vim.lsp.protocol.make_client_capabilities()
                 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -103,10 +105,10 @@ lspmanager.install = function(lsp)
 
         local available = lspmanager.available_servers()
         local available_for_filetype = {}
-        for lsp, config in pairs(servers) do
-            if vim.tbl_contains(available, lsp) then
-                if vim.tbl_contains(config.default_config.filetypes, filetype) then
-                    table.insert(available_for_filetype, lsp)
+        for lsp_name, server in pairs(servers) do
+            if vim.tbl_contains(available, lsp_name) then
+                if vim.tbl_contains(server.config.default_config.filetypes, filetype) then
+                    table.insert(available_for_filetype, lsp_name)
                 end
             end
         end
@@ -128,9 +130,9 @@ lspmanager.install = function(lsp)
             error("no server found for filetype " .. filetype)
         elseif #available_for_filetype > 1 then
             error(
-            "multiple servers found ("
-            .. table.concat(available_for_filetype, "/")
-            .. "), please install one of them"
+                "multiple servers found ("
+                    .. table.concat(available_for_filetype, "/")
+                    .. "), please install one of them"
             )
         end
 
@@ -190,6 +192,8 @@ lspmanager.update = function(lsp)
     end
 
     local path = get_path(lsp)
+
+    print("Looking for " .. lsp .. " updates...")
 
     jobs.update_job(lsp, path)
 end

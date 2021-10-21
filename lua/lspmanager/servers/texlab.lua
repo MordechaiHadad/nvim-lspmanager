@@ -1,15 +1,13 @@
-local lsp_name = "omnisharp"
+local lsp_name = "texlab"
 local config = require("lspmanager.utilities").get_config(lsp_name)
 local os = require("lspmanager.os")
 
-local cmd_exec = ""
+local cmd_exec = "./texlab"
 if os.get_os() == os.OSes.Windows then
-    cmd_exec = "./OmniSharp.exe"
-else
-    cmd_exec = "./run"
+    cmd_exec = cmd_exec .. ".exe"
 end
 
-config.default_config.cmd = { cmd_exec, "--languageserver", "--hostPID", tostring(vim.fn.getpid()) }
+config.default_config.cmd[1] = cmd_exec
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then
@@ -17,22 +15,23 @@ local function install_script()
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
         function get_latest_version() {
-            $response = invoke-restmethod -uri "https://api.github.com/repos/omnisharp/omnisharp-roslyn/releases/latest"
+            $response = invoke-restmethod -uri "https://api.github.com/repos/latex-lsp/texlab/releases/latest"
             return $response.tag_name
         }
 
         $version = get_latest_version
-        $url = "https://github.com/OmniSharp/omnisharp-roslyn/releases/download/$($version)/omnisharp-win-x64.zip"
-        $out = "omnisharp.zip"
+        $url = "https://github.com/latex-lsp/texlab/releases/download/$($version)/texlab-x86_64-windows.zip"
+        $out = "texlab.zip"
         
         if (Test-Path -Path Get-Location) {
             Remove-Item Get-Location -Force -Recurse
         }
+
         Invoke-WebRequest -Uri $url -OutFile $out
-        
+
         Add-Type -AssemblyName System.IO.Compression.FileSystem
         [System.IO.Compression.ZipFile]::ExtractToDirectory($out, ".")
-
+        
         Out-File -FilePath VERSION -Encoding string -InputObject "$($version)"
         Remove-Item $out
         ]]
@@ -44,21 +43,23 @@ local function install_script()
     fi
 
     os=$(uname -s | tr "[:upper:]" "[:lower:]")
-    version=$(curl -s "https://api.github.com/repos/OmniSharp/omnisharp-roslyn/releases/latest" | jq -r '.tag_name')
+    architecture=$(uname -m | tr "[:upper:]" "[:lower:]")
+    version=$(curl -s "https://api.github.com/repos/latex-lsp/texlab/releases/latest" | jq -r '.tag_name')
 
     case $os in
     linux)
-    platform="linux-x64"
+    platform="linux"
     ;;
     darwin)
-    platform="osx"
+    platform="macos"
     ;;
     esac
 
-    curl -L -o "omnisharp.zip" https://github.com/OmniSharp/omnisharp-roslyn/releases/download/$version/omnisharp-$platform.zip
-    unzip omnisharp.zip
-    rm omnisharp.zip
-    chmod +x run
+    curl -L -o "texlab.tar.gz" "https://github.com/latex-lsp/texlab/releases/download/$version/texlab-x86_64-$platform.tar.gz"
+
+    tar -xf texlab.tar.gz
+    rm -rf texlab.tar.gz
+
     echo $version > VERSION
     ]]
 end
@@ -66,16 +67,9 @@ end
 return {
     config = config,
 
-    on_new_config = function(new_config, new_root_dir)
-        if new_root_dir ~= nil then
-            table.insert(new_config.cmd, "-s")
-            table.insert(new_config.cmd, new_root_dir)
-        end
-    end,
-
     install_script = install_script,
 
     update_script = function()
-        return require("lspmanager.installers.manual").update_script("OmniSharp/omnisharp-roslyn")
+        return require("lspmanager.installers.manual").update_script("latex-lsp/texlab")
     end,
 }

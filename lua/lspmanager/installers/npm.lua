@@ -2,13 +2,16 @@ local npm = {}
 
 local os = require("lspmanager.os")
 
-function npm.install_script(args) -- TODO: Change it from string to a table
+function npm.install_script(args)
     if os.get_os() == os.OSes.Windows then
         return [[
         if(-not(Test-Path -Path 'package.json' -PathType Leaf)) {
-            Invoke-Expression 'npm init -y --scope=lspinstall'
+            npm init -y --scope=lspmanager
         }
-        Invoke-Expression 'npm install ]] .. table.concat(args, " ") .. "'\n" .. [[ exit $LASTEXITCODE
+        npm install ]] .. table.concat(args, " ") ..
+        [[ 
+
+        exit $LASTEXITCODE
         ]]
     end
     return [[
@@ -23,7 +26,7 @@ function npm.update_script()
         $result = Invoke-Expression 'npm outdated'
 
         if ($result -ne $null) {
-            Invoke-Expression 'npm update'
+            npm update
             exit 0
         }
         else {
