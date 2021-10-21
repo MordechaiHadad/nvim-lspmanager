@@ -103,15 +103,7 @@ lspmanager.install = function(lsp)
             error("No file attached in current buffer, aborting...")
         end
 
-        local available = lspmanager.available_servers()
-        local available_for_filetype = {}
-        for lsp_name, server in pairs(servers) do
-            if vim.tbl_contains(available, lsp_name) then
-                if vim.tbl_contains(server.config.default_config.filetypes, filetype) then
-                    table.insert(available_for_filetype, lsp_name)
-                end
-            end
-        end
+		local available_for_filetype = require("lspmanager.utilities").available_for_filetype()
 
         if #available_for_filetype == 1 then
             for _, config in pairs(vim.lsp.get_active_clients()) do
