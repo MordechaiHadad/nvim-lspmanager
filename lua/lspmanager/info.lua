@@ -71,12 +71,11 @@ local function get_active_clients()
         local client = item.name
         clients_table[client] = {}
         clients_table[client]["Autostart"] = item.config["autostart"]
-        clients_table[client]["full_command"] = vim.fn.join(item.config["cmd"], " ")
+        clients_table[client]["Full Command"] = vim.fn.join(item.config["cmd"], " ")
         clients_table[client]["cmd"] = item.config["cmd_cwd"]
-        clients_table[client]["cmd_is_exe"] = vim.fn.executable(clients_table[client]["cmd"]) == 1
-        clients_table[client]["root_dir"] = item.config["root_dir"]
+        clients_table[client]["Root Directory"] = item.config["root_dir"]
         clients_table[client]["id"] = item.config["id"]
-        clients_table[client]["initialized"] = item.config["initialized"]
+        clients_table[client]["Initialized"] = item.config["initialized"]
     end
 
     return clients_table
@@ -123,10 +122,20 @@ function Info.display()
     set_lines(buf, set_level({ vim.fn.join(installed, ", ") }, 2), "String")
 	empty()
 
-	local suggestions = require("lspmanager.utilities").available_for_filetype(on_buf)
-	set_lines(buf, set_level({ "Suggested servers: " }, 1), "Function")
-	set_lines(buf, set_level(suggestions, 2), "String")
-	empty()
+    local available_servers = require("lspmanager.utilities").available_for_filetype(on_buf)
+    local suggestions = {}
+    for _, lsp_name in pairs(available_servers) do
+        if require("lspmanager").is_lsp_installed(lsp_name) == 0 then
+            table.insert(suggestions, lsp_name)
+        end
+    end
+
+
+    if #suggestions > 0 then
+	    set_lines(buf, set_level({ "Suggested servers: " }, 1), "Function")
+	    set_lines(buf, set_level(suggestions, 2), "String")
+	    empty()
+    end
 
 	set_lines(buf, set_level({"Find logs at: "..vim.fn.stdpath('cache')..'/lsp.log'}, 1), 'TSVariable')
 end
