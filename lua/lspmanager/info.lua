@@ -126,6 +126,9 @@ function Info.display()
 	local suggestions = require("lspmanager.utilities").available_for_filetype(on_buf)
 	set_lines(buf, set_level({ "Suggested servers: " }, 1), "Function")
 	set_lines(buf, set_level(suggestions, 2), "String")
+	empty()
+
+	set_lines(buf, set_level({"Find logs at: "..vim.fn.stdpath('cache')..'/lsp.log'}, 1), 'TSVariable')
 end
 
 return Info
