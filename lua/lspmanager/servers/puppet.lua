@@ -27,7 +27,7 @@ local function install_script()
 
     curl -L -o "puppet.zip" "https://github.com/puppetlabs/puppet-editor-services/releases/download/$version/puppet_editor_services_$version.zip"
     unzip puppet.zip
-    rm puppet.zip
+    rm -rf puppet.zip
 
     echo $version > VERSION
     ]]
