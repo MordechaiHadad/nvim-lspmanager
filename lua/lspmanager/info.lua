@@ -131,6 +131,11 @@ function Info.display()
     local installed = require("lspmanager").installed_servers()
     set_lines(buf, set_level({ "Installed servers: " }, 1), "Function")
     set_lines(buf, set_level({ vim.fn.join(installed, ", ") }, 2), "String")
+	empty()
+
+	local suggestions = require("lspmanager.utilities").available_for_filetype()
+	print(vim.inspect(suggestions))
+	-- set_lines(buf, set_level(suggestions, 2), "String")
 end
 
 return Info
