@@ -1,14 +1,15 @@
 local lsp_name = "puppet"
 local config = require("lspmanager.utilities").get_config(lsp_name)
+local path = require("lspmanager.utilities").get_path(lsp_name)
 local os = require("lspmanager.os")
 
-local cmd_exec = "./puppet-languageserver"
+local cmd_exec = path .. "/puppet-languageserver"
 
 if os.get_os() == os.OSes.Windows then
     cmd_exec = cmd_exec .. ".cmd"
 end
 
-config.default_config.cmd = {"ruby", "puppet-languageserver", "--stdio"}
+config.default_config.cmd = {"ruby", cmd_exec, "--stdio"}
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then
