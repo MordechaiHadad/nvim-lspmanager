@@ -104,7 +104,6 @@ lspmanager.install = function(lsp)
         end
 
 		local available_for_filetype = require("lspmanager.utilities").available_for_filetype()
-		print(vim.inspect(available_for_filetype))
 
         if #available_for_filetype == 1 then
             for _, config in pairs(vim.lsp.get_active_clients()) do
