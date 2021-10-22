@@ -73,6 +73,7 @@ local function get_active_clients()
         clients_table[client]["Autostart"] = item.config["autostart"]
         clients_table[client]["Full Command"] = vim.fn.join(item.config["cmd"], " ")
         clients_table[client]["cmd"] = item.config["cmd_cwd"]
+		clients_table[client]["Has executable"] = vim.fn.executable(item.config['cmd'][1]) == 1
         clients_table[client]["Root Directory"] = item.config["root_dir"]
         clients_table[client]["id"] = item.config["id"]
         clients_table[client]["Initialized"] = item.config["initialized"]
@@ -109,8 +110,7 @@ function Info.display()
 	local on_buf = vim.api.nvim_get_current_buf()
     local buf, _ = create_info_window()
 
-    vim.cmd([[hi Another gui=bold guifg=#eb6c76]])
-    set_lines(buf, center(header), "Another")
+    set_lines(buf, center(header), "TSConstructor")
     empty()
 
     set_lines(buf, set_level({ "Active Clients on current Buffer: " }, 1), "Function")
@@ -118,7 +118,8 @@ function Info.display()
     empty()
 
     local installed = require("lspmanager").installed_servers()
-    set_lines(buf, set_level({ "Installed servers: " }, 1), "Function")
+	local installed_count = vim.tbl_count(installed)
+    set_lines(buf, set_level({ "Installed servers ("..installed_count.."): " }, 1), "Function")
     set_lines(buf, set_level({ vim.fn.join(installed, ", ") }, 2), "String")
 	empty()
 
@@ -132,7 +133,8 @@ function Info.display()
 
 
     if #suggestions > 0 then
-	    set_lines(buf, set_level({ "Suggested servers: " }, 1), "Function")
+		local suggestions_count = vim.tbl_count(suggestions)
+	    set_lines(buf, set_level({ "Suggested servers ("..suggestions_count.."): " }, 1), "Function")
 	    set_lines(buf, set_level(suggestions, 2), "String")
 	    empty()
     end
