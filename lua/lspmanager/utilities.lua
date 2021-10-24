@@ -1,7 +1,7 @@
 local utilities = {}
 
 function utilities.available_for_filetype(on_buf)
-	local available = lspmanager.available_servers()
+	local available = require("lspmanager").available_servers()
 	local available_for_filetype = {}
 	for _, lsp_name in pairs(utilities.servers_list) do
 		local server = require("lspmanager.servers."..lsp_name)
@@ -62,6 +62,7 @@ utilities.servers_list = {
     "cssls",
     "dockerls",
     "elixirls",
+    "elmls",
     "emmet_ls",
     "fsautocomplete",
     "hls",

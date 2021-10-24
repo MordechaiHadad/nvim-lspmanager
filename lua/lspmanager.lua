@@ -137,8 +137,8 @@ lspmanager.install = function(lsp)
             jobs.installation_job(available_for_filetype[1], path, false)
         elseif #available_for_filetype == 0 then
             error("no server found for filetype " .. filetype)
-        elseif #suggested_servers > 1 then
-            error("multiple servers found (" .. table.concat(suggested_servers, "/") .. "), please install one of them")
+        elseif #available_for_filetype > 1 then
+            error("multiple servers found (" .. table.concat(available_for_filetype, "/") .. "), please install one of them")
         end
 
         return
