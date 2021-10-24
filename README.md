@@ -86,7 +86,8 @@ nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/te
 | :white_check_mark: | Terraform                                      | `terraformls`       |
 | :white_check_mark: | Javascript/Typescript                          | `tsserver`          |
 | :white_check_mark: | VimL                                           | `vimls`             |
-| :white_check_mark: | Vuejs                                          | `vuels`             | 
+| :white_check_mark: | Vue.js 3                                       | `volar`             | 
+| :white_check_mark: | Vue.js 2                                       | `vuels`             | 
 
 ## Credits
 
