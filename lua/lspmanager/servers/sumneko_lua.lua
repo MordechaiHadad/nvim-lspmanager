@@ -22,6 +22,9 @@ config.default_config.settings = {
         workspace = {
             preloadFileSize = 180,
         },
+        diagnostics = {
+            globals = {"vim"}
+        },
     },
 }
 

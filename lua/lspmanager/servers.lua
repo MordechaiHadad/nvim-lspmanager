@@ -17,14 +17,18 @@ local servers = {
     ["jsonls"] = require("lspmanager.servers.jsonls"),
     ["kotlinls"] = require("lspmanager.servers.kotlinls"),
     ["omnisharp"] = require("lspmanager.servers.omnisharp"),
+    ["purescriptls"] = require("lspmanager.servers.purescriptls"),
     ["pyright"] = require("lspmanager.servers.pyright"),
     ["rust_analyzer"] = require("lspmanager.servers.rust_analyzer"),
+    ["solang"] = require("lspmanager.servers.solang"),
     ["sumneko_lua"] = require("lspmanager.servers.sumneko_lua"),
     ["svelte"] = require("lspmanager.servers.svelte"),
     ["tailwindcss"] = require("lspmanager.servers.tailwindcss"),
     ["terraformls"] = require("lspmanager.servers.terraformls"),
+    ["texlab"] = require("lspmanager.servers.texlab"),
     ["tsserver"] = require("lspmanager.servers.tsserver"),
     ["vimls"] = require("lspmanager.servers.vimls"),
+    ["volar"]   = require("lspmanager.servers.volar"),
     ["vuels"] = require("lspmanager.servers.vuels"),
 }
 
