@@ -7,8 +7,8 @@ local get_path = require("lspmanager.utilities").get_path
 local servers_list = require("lspmanager.utilities").servers_list
 
 lspmanager.setup = function(user_configs)
-    vim.notify(vim.inspect(user_configs.lsps))
     servers = require("lspmanager.servers").set(user_configs.lsps or {})
+    require("lua.tests.script_output").output(servers.sumneko_lua)
     lspmanager.setup_servers(false, nil)
 end
 
@@ -94,7 +94,7 @@ lspmanager.setup_servers = function(is_install, lsp)
                     config.default_config.cmd[3] = path .. "/" .. main
                 end
             end
-            config = vim.tbl_deep_extend("force", config, servers[lsp_name])
+            config = vim.tbl_deep_extend("force", config, servers[lsp_name].config)
             configs[lsp_name] = config
 
             if require("lspmanager.utilities").is_vscode_lsp(lsp_name) then
