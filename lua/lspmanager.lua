@@ -1,13 +1,14 @@
 local lspmanager = {}
 
-local servers = require("lspmanager.servers")
+local servers = require("lspmanager.servers").get()
 local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
 local servers_list = require("lspmanager.utilities").servers_list
 
 lspmanager.setup = function(user_configs)
-    servers.get() = require("lspmanager.servers").set(user_configs.lsp or {})
+    vim.notify(vim.inspect(user_configs.lsps))
+    servers = require("lspmanager.servers").set(user_configs.lsps or {})
     lspmanager.setup_servers(false, nil)
 end
 
@@ -16,13 +17,13 @@ lspmanager.is_lsp_installed = function(lsp)
 end
 
 lspmanager.available_servers = function()
-    return vim.tbl_keys(servers.get())
+    return vim.tbl_keys(servers)
 end
 
 lspmanager.suggested_servers = function(filetype)
     local available = lspmanager.available_servers()
     local available_for_filetype = {}
-    for lsp_name, server in pairs(servers.get()) do
+    for lsp_name, server in pairs(servers) do
         if vim.tbl_contains(available, lsp_name) then
             if vim.tbl_contains(server.config.default_config.filetypes, filetype) then
                 table.insert(available_for_filetype, lsp_name)
@@ -47,7 +48,7 @@ end
 
 lspmanager.setup_servers = function(is_install, lsp)
     if is_install then
-        local server_config = servers.get(lsp).config
+        local server_config = servers[lsp].config
         local path = get_path(lsp)
 
         local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
@@ -63,7 +64,7 @@ lspmanager.setup_servers = function(is_install, lsp)
             end
         end
 
-        config = vim.tbl_deep_extend("force", config, servers_config[lsp])
+        config = vim.tbl_deep_extend("force", config, servers[lsp])
         configs[lsp] = config
 
         if require("lspmanager.utilities").is_vscode_lsp(lsp) then
@@ -80,7 +81,7 @@ lspmanager.setup_servers = function(is_install, lsp)
     end
     for _, lsp_name in pairs(servers_list) do
         local path = get_path(lsp_name)
-        local server_config = servers.get(lsp_name).config
+        local server_config = servers[lsp_name].config
         if lspmanager.is_lsp_installed(lsp_name) == 1 and not configs[lsp_name] then
             local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
             if config.default_config.cmd then
@@ -93,7 +94,7 @@ lspmanager.setup_servers = function(is_install, lsp)
                     config.default_config.cmd[3] = path .. "/" .. main
                 end
             end
-            config = vim.tbl_deep_extend("force", config, servers_config[lsp_name])
+            config = vim.tbl_deep_extend("force", config, servers[lsp_name])
             configs[lsp_name] = config
 
             if require("lspmanager.utilities").is_vscode_lsp(lsp_name) then
@@ -143,7 +144,7 @@ lspmanager.install = function(lsp)
         return
     end
 
-    if not servers.get(lsp) then
+    if not servers[lsp] then
         error("could not find LSP " .. lsp)
     end
 
@@ -162,7 +163,7 @@ lspmanager.install = function(lsp)
 end
 
 lspmanager.uninstall = function(lsp)
-    if not servers.get(lsp) then
+    if not servers[lsp] then
         error("could not find LSP " .. lsp)
     end
 
@@ -187,7 +188,7 @@ lspmanager.update = function(lsp)
         return
     end
 
-    if not servers.get(lsp) then
+    if not servers[lsp] then
         error("Could not find LSP " .. lsp)
     end
 
