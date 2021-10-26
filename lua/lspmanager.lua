@@ -5,10 +5,11 @@ local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
 local servers_list = require("lspmanager.utilities").servers_list
+local enable_gdscript = false
 
 lspmanager.setup = function(user_configs)
     servers = require("lspmanager.servers").set(user_configs.lsps or {})
-    require("lua.tests.script_output").output(servers.sumneko_lua)
+    enable_gdscript = user_configs.enable_gdscript or false
     lspmanager.setup_servers(false, nil)
 end
 
@@ -109,7 +110,9 @@ lspmanager.setup_servers = function(is_install, lsp)
             end
         end
     end
-    require("lspconfig").gdscript.setup({})
+    if enable_gdscript then
+        require("lspconfig").gdscript.setup({})
+    end
 end
 
 lspmanager.install = function(lsp)
