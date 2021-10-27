@@ -54,7 +54,7 @@ function jobs.update_job(lsp, path) -- NOTE: might add mass update if viable
         shell = "bash"
     end
 
-    vim.fn.jobstart({ shell, "-c", servers.get(lsp).update_script() }, {
+    vim.fn.jobstart({ shell, "-c", servers(lsp).update_script() }, {
         cwd = path,
         on_exit = function(_, exitcode)
             if exitcode == 69 then
