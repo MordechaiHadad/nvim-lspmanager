@@ -8,8 +8,7 @@ function pip.install_script(args) -- TODO: Change it from string to a table
 
         python -m venv ./venv
         .\venv\Scripts\pip3.exe install -U pip
-        .\venv\Scripts\pip3.exe install -U ]] .. table.concat(args, " ") ..
-        [[ 
+        .\venv\Scripts\pip3.exe install -U ]] .. table.concat(args, " ") .. [[ 
 
         exit $LASTEXITCODE
         ]]
@@ -26,9 +25,8 @@ function pip.update_script(args)
 
         $output = $(.\venv\Scripts\pip3.exe list --outdated)
 
-        $server = "]] .. table.concat(args, " ") .. '"' ..
-
-        [[
+        $server = "]] .. table.concat(args, " ") .. '"' .. 
+[[
 
         if ($output | Select-String -Pattern $server) {
             .\venv\Scripts\pip3.exe install -U $server
@@ -41,9 +39,8 @@ function pip.update_script(args)
     return [[
     output=$(venv/bin/pip list --outdated)
 
-    server="]] .. table.concat(args, " ") .. '"' ..
-
-    [[
+    server="]] .. table.concat(args, " ") .. '"' .. 
+[[
     
     if echo $output | grep server > /dev/null; then
         ./venv/bin/pip3 install -U $server
