@@ -4,7 +4,7 @@ local config_file = require("lspmanager.info.config")
 local config = config_file.options
 
 local function create_info_window()
-	package.loaded['lspmanager.info'] = nil
+    package.loaded["lspmanager.info"] = nil
     local opts = { noremap = true, silent = true }
 
     local buf = vim.api.nvim_create_buf(false, true)
@@ -19,8 +19,13 @@ local function create_info_window()
     local row = math.ceil((height - h) / 2 - 1)
     local col = math.ceil((width - w) / 2)
     local win = vim.api.nvim_open_win(buf, true, {
-        relative = "editor", border = "rounded", style = "minimal", row = row,
-        col = col, width = w, height = h,
+        relative = "editor",
+        border = "rounded",
+        style = "minimal",
+        row = row,
+        col = col,
+        width = w,
+        height = h,
     })
 
     return buf, win
@@ -45,7 +50,9 @@ local function set_lines(buf, text, hi)
     count = count + #text
 end
 
-local function empty() set_lines(0, { "" }, "None") end
+local function empty()
+    set_lines(0, { "" }, "None")
+end
 
 local function center(tbl)
     local w = (vim.api.nvim_win_get_width(0) - #config.header[1])/2 - 1
@@ -68,7 +75,7 @@ local function get_active_clients()
         clients_table[client]["Autostart"] = item.config["autostart"]
         clients_table[client]["Full Command"] = vim.fn.join(item.config["cmd"], " ")
         clients_table[client]["cmd"] = item.config["cmd_cwd"]
-		clients_table[client]["Has executable"] = vim.fn.executable(item.config['cmd'][1]) == 1
+        clients_table[client]["Has executable"] = vim.fn.executable(item.config["cmd"][1]) == 1
         clients_table[client]["Root Directory"] = item.config["root_dir"]
         clients_table[client]["id"] = item.config["id"]
         clients_table[client]["Initialized"] = item.config["initialized"]
@@ -82,11 +89,11 @@ local function local_pad(str, i)
 end
 
 local do_client_stuff = function(buf)
-	local total_clients = get_active_clients()
-	if vim.tbl_isempty(total_clients) then
-		set_lines(buf, set_level({"No Clients Attatched! :("}, 2), "String")
-		return
-	end
+    local total_clients = get_active_clients()
+    if vim.tbl_isempty(total_clients) then
+        set_lines(buf, set_level({ "No Clients Attatched! :(" }, 2), "String")
+        return
+    end
     for client_name, client_props in pairs(total_clients) do
         set_lines(buf, set_level({ client_name }, 2), "String")
         for prop_name, prop_value in pairs(client_props) do
@@ -102,7 +109,7 @@ local do_client_stuff = function(buf)
 end
 
 function Info.display()
-	local on_buf = vim.api.nvim_get_current_buf()
+    local on_buf = vim.api.nvim_get_current_buf()
     local buf, _ = create_info_window()
 
     set_lines(buf, center(config.header), "TSConstructor")
@@ -113,10 +120,10 @@ function Info.display()
     empty()
 
     local installed = require("lspmanager").installed_servers()
-	local installed_count = vim.tbl_count(installed)
-    set_lines(buf, set_level({ "Installed servers ("..installed_count.."): " }, 1), "Function")
+    local installed_count = vim.tbl_count(installed)
+    set_lines(buf, set_level({ "Installed servers (" .. installed_count .. "): " }, 1), "Function")
     set_lines(buf, set_level({ vim.fn.join(installed, ", ") }, 2), "String")
-	empty()
+    empty()
 
     local available_servers = require("lspmanager.utilities").available_for_filetype(on_buf)
     local suggestions = {}
@@ -126,15 +133,14 @@ function Info.display()
         end
     end
 
-
     if #suggestions > 0 then
-		local suggestions_count = vim.tbl_count(suggestions)
-	    set_lines(buf, set_level({ "Suggested servers ("..suggestions_count.."): " }, 1), "Function")
-	    set_lines(buf, set_level(suggestions, 2), "String")
-	    empty()
+        local suggestions_count = vim.tbl_count(suggestions)
+        set_lines(buf, set_level({ "Suggested servers (" .. suggestions_count .. "): " }, 1), "Function")
+        set_lines(buf, set_level(suggestions, 2), "String")
+        empty()
     end
 
-	set_lines(buf, set_level({"Find logs at: "..vim.fn.stdpath('cache')..'/lsp.log'}, 1), 'TSVariable')
+    set_lines(buf, set_level({ "Find logs at: " .. vim.fn.stdpath("cache") .. "/lsp.log" }, 1), "TSVariable")
 end
 
 return Info

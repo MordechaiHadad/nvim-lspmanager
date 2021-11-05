@@ -8,8 +8,7 @@ function go.install_script(args)
         $env:GOPATH = $(pwd)
         $env:GOBIN = $(pwd)
         $env:GO111MODULE = "on"
-        go get -v ]] .. table.concat(args, " ") ..
-        [[
+        go get -v ]] .. table.concat(args, " ") .. [[
 
         go clean -modcache
         exit $LASTEXITCODE]]
@@ -24,8 +23,7 @@ function go.update_script(args)
         $env:GOPATH = $(pwd)
         $env:GOBIN = $(pwd)
         $env:GO111MODULE = "on"
-        go get -v ]] .. table.concat(args, " ") ..
-        [[
+        go get -v ]] .. table.concat(args, " ") .. [[
 
         Invoke-Expression 'go clean -modcache'
 
