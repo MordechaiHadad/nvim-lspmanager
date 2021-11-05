@@ -1,11 +1,7 @@
 local Info = {}
 local ns = vim.api.nvim_create_namespace("lspmanager_info")
-
-local header = {
-    [[|  _._  ._ _  _.._  _. _  _ ._]],
-    [[|__>|_) | | |(_|| |(_|(_|(/_| ]],
-    [[    |                  _|     ]],
-}
+local config_file = require("lspmanager.info.config")
+local config = config_file.options
 
 local function create_info_window()
     package.loaded["lspmanager.info"] = nil
@@ -37,10 +33,9 @@ end
 
 local function set_level(tbl, i)
     -- local levels = { " ", " ", " " }
-    local levels = { "◈  ", "◇ ", " " }
     local padded_table = {}
     for _, item in ipairs(tbl) do
-        table.insert(padded_table, (("\t"):rep(i)) .. (levels[i] or " ") .. item)
+        table.insert(padded_table, (("\t"):rep(i)) .. (config.levels[i] or " ") .. item)
     end
 
     return padded_table
@@ -60,7 +55,7 @@ local function empty()
 end
 
 local function center(tbl)
-    local w = (vim.api.nvim_win_get_width(0) - #header[1]) / 2 - 1
+    local w = (vim.api.nvim_win_get_width(0) - #config.header[1])/2 - 1
     local pad = (" "):rep(math.floor(w))
 
     local new_tbl = {}
@@ -117,7 +112,7 @@ function Info.display()
     local on_buf = vim.api.nvim_get_current_buf()
     local buf, _ = create_info_window()
 
-    set_lines(buf, center(header), "TSConstructor")
+    set_lines(buf, center(config.header), "TSConstructor")
     empty()
 
     set_lines(buf, set_level({ "Active Clients on current Buffer: " }, 1), "Function")
