@@ -1,5 +1,4 @@
 local servers = {
-    -- ["jdtls"] = require("lspmanager.servers.jdtls"),
     ["angularls"] = require("lspmanager.servers.angularls"),
     ["bashls"] = require("lspmanager.servers.bashls"),
     ["clangd"] = require("lspmanager.servers.clangd"),
@@ -28,8 +27,29 @@ local servers = {
     ["texlab"] = require("lspmanager.servers.texlab"),
     ["tsserver"] = require("lspmanager.servers.tsserver"),
     ["vimls"] = require("lspmanager.servers.vimls"),
-    ["volar"]   = require("lspmanager.servers.volar"),
+    ["volar"] = require("lspmanager.servers.volar"),
     ["vuels"] = require("lspmanager.servers.vuels"),
 }
 
-return servers
+return {
+    get = function(server_name)
+        if server_name then
+            return servers[server_name]
+        end
+        return servers
+    end,
+
+    set = function(user_configs)
+        vim.validate({ user_configs = { user_configs, "table" } })
+
+        for name, configuration in pairs(user_configs) do
+            servers[name] = vim.tbl_deep_extend("force", servers[name], {
+                config = {
+                    default_config = configuration,
+                },
+            })
+        end
+
+        return servers
+    end,
+}

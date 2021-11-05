@@ -1,13 +1,15 @@
-lspmanager = {}
+local lspmanager = {}
 
-local servers = require("lspmanager.servers")
+local servers = require("lspmanager.servers").get()
 local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
-
 local servers_list = require("lspmanager.utilities").servers_list
+local enable_gdscript = false
 
-lspmanager.setup = function()
+lspmanager.setup = function(user_configs)
+    servers = require("lspmanager.servers").set(user_configs.lsps or {})
+    enable_gdscript = user_configs.enable_gdscript or false
     lspmanager.setup_servers(false, nil)
 end
 
@@ -17,6 +19,19 @@ end
 
 lspmanager.available_servers = function()
     return vim.tbl_keys(servers)
+end
+
+lspmanager.suggested_servers = function(filetype)
+    local available = lspmanager.available_servers()
+    local available_for_filetype = {}
+    for lsp_name, server in pairs(servers) do
+        if vim.tbl_contains(available, lsp_name) then
+            if vim.tbl_contains(server.config.default_config.filetypes, filetype) then
+                table.insert(available_for_filetype, lsp_name)
+            end
+        end
+    end
+    return available_for_filetype
 end
 
 lspmanager.installed_servers = function(opts)
@@ -49,6 +64,8 @@ lspmanager.setup_servers = function(is_install, lsp)
                 config.default_config.cmd[3] = path .. "/" .. main
             end
         end
+
+        config = vim.tbl_deep_extend("force", config, servers[lsp])
         configs[lsp] = config
 
         if require("lspmanager.utilities").is_vscode_lsp(lsp) then
@@ -78,6 +95,7 @@ lspmanager.setup_servers = function(is_install, lsp)
                     config.default_config.cmd[3] = path .. "/" .. main
                 end
             end
+            config = vim.tbl_deep_extend("force", config, servers[lsp_name].config)
             configs[lsp_name] = config
 
             if require("lspmanager.utilities").is_vscode_lsp(lsp_name) then
@@ -92,7 +110,9 @@ lspmanager.setup_servers = function(is_install, lsp)
             end
         end
     end
-    require("lspconfig").gdscript.setup({})
+    if enable_gdscript then
+        require("lspconfig").gdscript.setup({})
+    end
 end
 
 lspmanager.install = function(lsp)
@@ -103,7 +123,7 @@ lspmanager.install = function(lsp)
             error("No file attached in current buffer, aborting...")
         end
 
-		local available_for_filetype = require("lspmanager.utilities").available_for_filetype()
+        local available_for_filetype = require("lspmanager.utilities").available_for_filetype()
 
         if #available_for_filetype == 1 then
             for _, config in pairs(vim.lsp.get_active_clients()) do

@@ -16,7 +16,6 @@ Make sure to use Neovim version 0.5.x or higher.
 #### Dependencies
 Make sure you have the following packages installed (some dependencies are responsible for others i.e dotnet LSPs download via `dotnet`):
 
-
 <details>
     <summary>Unix</summary>
 

@@ -8,8 +8,7 @@ function npm.install_script(args)
         if(-not(Test-Path -Path 'package.json' -PathType Leaf)) {
             npm init -y --scope=lspmanager
         }
-        npm install ]] .. table.concat(args, " ") ..
-        [[ 
+        npm install ]] .. table.concat(args, " ") .. [[ 
 
         exit $LASTEXITCODE
         ]]
