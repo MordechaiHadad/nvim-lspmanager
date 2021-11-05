@@ -213,19 +213,20 @@ end
 
 lspmanager.ensure_installed = function(ensure_installed)
     if #ensure_installed > 0 then
-        for _, server in pairs(ensure_installed) do
+        for _, server in ipairs(ensure_installed) do
+
             if not servers[server] then
-                return
+                goto skip
             end
 
             for _, config in pairs(vim.lsp.get_active_clients()) do
                 if config.name == server then
-                    return
+                    goto skip
                 end
             end
 
             if lspmanager.is_lsp_installed(server) == 1 then
-                return
+                goto skip
             end
 
             local path = get_path(server)
@@ -233,6 +234,8 @@ lspmanager.ensure_installed = function(ensure_installed)
 
             print("Installing " .. server .. "...")
             jobs.installation_job(server, path, false)
+
+            ::skip::
         end
     end
 end
