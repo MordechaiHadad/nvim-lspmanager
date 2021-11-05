@@ -10,8 +10,8 @@ local enable_gdscript = nil
 lspmanager.setup = function(user_configs)
     servers = require("lspmanager.servers").set(user_configs.lsps or {})
     enable_gdscript = user_configs.enable_gdscript or false
-    lspmanager.ensure_installed(user_configs.ensure_installed or {})
     lspmanager.setup_servers(false, nil)
+    lspmanager.ensure_installed(user_configs.ensure_installed or {})
 end
 
 lspmanager.is_lsp_installed = function(lsp)
@@ -163,11 +163,6 @@ lspmanager.install = function(lsp)
         end
     end
 
-    if lspmanager.is_lsp_installed(lsp) then
-        print(lsp .. " is already installed")
-        return
-    end
-
     local path = get_path(lsp)
     vim.fn.mkdir(path, "p")
 
@@ -229,7 +224,7 @@ lspmanager.ensure_installed = function(ensure_installed)
                 end
             end
 
-            if lspmanager.is_lsp_installed(server) then
+            if lspmanager.is_lsp_installed(server) == 1 then
                 return
             end
 
