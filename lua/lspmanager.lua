@@ -5,11 +5,12 @@ local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
 local servers_list = require("lspmanager.utilities").servers_list
-local enable_gdscript = false
+local enable_gdscript = nil
 
 lspmanager.setup = function(user_configs)
     servers = require("lspmanager.servers").set(user_configs.lsps or {})
     enable_gdscript = user_configs.enable_gdscript or false
+    lspmanager.ensure_installed(user_configs.ensure_installed or {})
     lspmanager.setup_servers(false, nil)
 end
 
@@ -162,6 +163,11 @@ lspmanager.install = function(lsp)
         end
     end
 
+    if lspmanager.is_lsp_installed(lsp) then
+        print(lsp .. " is already installed")
+        return
+    end
+
     local path = get_path(lsp)
     vim.fn.mkdir(path, "p")
 
@@ -208,6 +214,32 @@ lspmanager.update = function(lsp)
     print("Looking for " .. lsp .. " updates...")
 
     jobs.update_job(lsp, path)
+end
+
+lspmanager.ensure_installed = function(ensure_installed)
+    if #ensure_installed > 0 then
+        for _, server in pairs(ensure_installed) do
+            if not servers[server] then
+                return
+            end
+
+            for _, config in pairs(vim.lsp.get_active_clients()) do
+                if config.name == server then
+                    return
+                end
+            end
+
+            if lspmanager.is_lsp_installed(server) then
+                return
+            end
+
+            local path = get_path(server)
+            vim.fn.mkdir(path, "p")
+
+            print("Installing " .. server .. "...")
+            jobs.installation_job(server, path, false)
+        end
+    end
 end
 
 return lspmanager
