@@ -19,7 +19,7 @@ lspmanager.is_lsp_installed = function(lsp)
 end
 
 lspmanager.available_servers = function()
-    return vim.tbl_keys(servers)
+    return vim.tbl_values(servers_list)
 end
 
 lspmanager.suggested_servers = function(filetype)
