@@ -125,7 +125,7 @@ lspmanager.install = function(lsp)
             error("No file attached in current buffer, aborting...")
         end
 
-		local available_for_filetype = require("lspmanager.utilities").available_for_filetype()
+        local available_for_filetype = require("lspmanager.utilities").available_for_filetype()
 
         if #available_for_filetype == 1 then
             for _, config in pairs(vim.lsp.get_active_clients()) do
@@ -143,7 +143,11 @@ lspmanager.install = function(lsp)
         elseif #available_for_filetype == 0 then
             error("no server found for filetype " .. filetype)
         elseif #available_for_filetype > 1 then
-            error("multiple servers found (" .. table.concat(available_for_filetype, "/") .. "), please install one of them")
+            error(
+                "multiple servers found ("
+                    .. table.concat(available_for_filetype, "/")
+                    .. "), please install one of them"
+            )
         end
 
         return

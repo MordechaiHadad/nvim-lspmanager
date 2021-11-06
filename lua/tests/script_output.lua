@@ -11,6 +11,5 @@ return {
 
         -- closes the open file
         io.close(file)
-
-    end
+    end,
 }

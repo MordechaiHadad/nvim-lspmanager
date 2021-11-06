@@ -20,7 +20,7 @@ return {
         return pip.install_script(args)
     end,
 
-    update_script = function ()
+    update_script = function()
         return pip.update_script(args)
-    end
+    end,
 }

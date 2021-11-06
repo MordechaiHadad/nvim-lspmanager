@@ -96,16 +96,20 @@ nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/te
 | :white_check_mark: | JSON                                           | `jsonls`            |
 | :white_check_mark: | Kotlin                                         | `kotlinls`          |
 | :white_check_mark: | CSharp                                         | `omnisharp`         |
+| :white_check_mark: | PureScript                                     | `purescriptls`      |
 | :white_check_mark: | Python                                         | `pyright`           |
 | :white_check_mark: | Rust                                           | `rust_analyser`     |
+| :white_check_mark: | Solidity                                       | `solang`            |
 | :white_check_mark: | Lua                                            | `sumneko_lua`       |
 | :white_check_mark: | Svelte                                         | `sveltels`          |
 | :white_check_mark: | Tailwindcss                                    | `tailwindcssls`     |
 | :white_check_mark: | Terraform                                      | `terraformls`       |
+| :white_check_mark: | LaTex                                          | `texlab`            |
 | :white_check_mark: | Javascript/Typescript                          | `tsserver`          |
 | :white_check_mark: | VimL                                           | `vimls`             |
+| :white_check_mark: | Volar                                          | `volar`           |
 | :white_check_mark: | Vuejs                                          | `vuels`             | 
 
 ## :heart: Credits
 
-- Big thanks to [lspinstall](https://github.com/kabouzeid/nvim-lspinstall) for helping me save time for some scripts
+- Big thanks to [lspinstall](https://github.com/kabouzeid/nvim-lspinstall) which is the mother plugin of lspmanager.

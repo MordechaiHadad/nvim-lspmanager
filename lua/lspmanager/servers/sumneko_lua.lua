@@ -23,7 +23,7 @@ config.default_config.settings = {
             preloadFileSize = 180,
         },
         diagnostics = {
-            globals = {"vim"}
+            globals = { "vim" },
         },
     },
 }
