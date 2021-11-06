@@ -9,6 +9,8 @@ local enable_gdscript = false
 
 lspmanager.setup = function(user_configs)
     servers = require("lspmanager.servers").set(user_configs.lsps or {})
+	-- Setting info customisation
+	require("lspmanager.info.config").setup(user_configs.info or {})
     enable_gdscript = user_configs.enable_gdscript or false
     lspmanager.setup_servers(false, nil)
 end
