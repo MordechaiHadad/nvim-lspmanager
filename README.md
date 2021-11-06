@@ -77,6 +77,57 @@ nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/te
 
 - `:Telescope lspmanager` is used for selecting either one of these options: `lsp_install`, `lsp_uninstall`, `lsp_update`
 
+## Customization
+
+You can declare which LSPs you want installed by adding the `ensure_installed` variable to nvim-lspmanager's `setup()` function:
+```lua
+require('lspmanager').setup({
+    ensure_installed = {
+        "sumneko_lua",
+        "pyright",
+    }
+})
+```
+
+The header text for `:LspInfoo` can be changed by adding the following lines of code to your config:
+```lua
+require('lspmanager').setup({
+    info = { 
+        header = {
+            [[▀█▀]],
+            [[░█░]],
+            [[░▀░]],
+    },},
+})
+```
+
+Example `nvim-lspmanager` config:
+```lua
+local luadev = require("lua-dev").setup({
+    library = {
+        vimruntime = true,
+        types = true,
+        plugins = false,
+    },
+    lspconfig = {
+        on_attach = function(client)
+            require("illuminate").on_attach(client)
+        end,
+    },
+})
+
+require("lspmanager").setup({
+    lsps = {
+        sumneko_lua = luadev,
+        rust_analyzer = {
+            on_attach = function(client)
+                require("illuminate").on_attach(client)
+            end,
+        },
+    },
+})
+```
+
 ## :white_check_mark: Supported language servers
 
 |                    | Language                                       | Language server     |
