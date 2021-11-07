@@ -1,4 +1,8 @@
+<div align="center">
+
 <img src="res/nvim-lspmanager.png" width=315>
+
+</div>
 
 # Nvim-lspmanager
 
