@@ -1,3 +1,5 @@
+<img src="res/nvim-lspmanager.png" width=315>
+
 # Nvim-lspmanager
 
 Nvim-lspmanager is a powerful and extensible manager for LSPs (Language Server Protocols).
