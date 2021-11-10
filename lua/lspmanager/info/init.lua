@@ -1,6 +1,7 @@
 local Info = {}
 local ns = vim.api.nvim_create_namespace("lspmanager_info")
 local config_file = require("lspmanager.info.config")
+local utils = require("lspmanager.utilities")
 local config = config_file.options
 
 local function create_info_window()
@@ -11,7 +12,7 @@ local function create_info_window()
     vim.api.nvim_buf_set_keymap(buf, "n", "q", ":q<CR>", opts)
     vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", ":q<CR>", opts)
     vim.api.nvim_buf_set_option(buf, "filetype", "lspinfo")
-    vim.api.nvim_buf_set_option(buf, "tabstop", 3)
+    vim.api.nvim_buf_set_option(buf, "tabstop", config.tabspace)
 
     local height, width = vim.o.lines, vim.o.columns
     local h = math.ceil(height * 0.8 - 2)
@@ -20,7 +21,7 @@ local function create_info_window()
     local col = math.ceil((width - w) / 2)
     local win = vim.api.nvim_open_win(buf, true, {
         relative = "editor",
-        border = "rounded",
+        border = config.border,
         style = "minimal",
         row = row,
         col = col,
@@ -68,17 +69,27 @@ end
 
 local function get_active_clients()
     local clients_table = {}
+    local available_servers = utils.available_for_filetype(Info.on_buf)
 
-    for _, item in ipairs(vim.lsp.get_active_clients()) do
+	local config_list = {}
+	for _,config_name in ipairs(available_servers) do
+		local server_config = require("lspconfig/configs")[config_name]
+		table.insert(config_list, server_config)
+	end
+
+    for _, item in ipairs(config_list) do
         local client = item.name
+		local default_conf = item.document_config.default_config
+
         clients_table[client] = {}
-        clients_table[client]["Autostart"] = item.config["autostart"]
-        clients_table[client]["Full Command"] = vim.fn.join(item.config["cmd"], " ")
-        clients_table[client]["cmd"] = item.config["cmd_cwd"]
-        clients_table[client]["Has executable"] = vim.fn.executable(item.config["cmd"][1]) == 1
-        clients_table[client]["Root Directory"] = item.config["root_dir"]
-        clients_table[client]["id"] = item.config["id"]
-        clients_table[client]["Initialized"] = item.config["initialized"]
+		clients_table[client]["Autostart"] = item["autostart"]
+		clients_table[client]["Full Command"] = vim.fn.join(item["cmd"], " ")
+		clients_table[client]["Root Directory"] = item.get_root_dir(vim.api.nvim_buf_get_name(Info.on_buf))
+        clients_table[client]["cmd"] = default_conf["cmd_cwd"]
+		clients_table[client]["Has executable"] = vim.fn.executable(item["cmd"][1]) == 1
+
+        -- clients_table[client]["Initialized"] = config["initialized"]
+        -- clients_table[client]["id"] = config["id"]
     end
 
     return clients_table
@@ -95,6 +106,10 @@ local do_client_stuff = function(buf)
         return
     end
     for client_name, client_props in pairs(total_clients) do
+		if not client_props["Has executable"] then
+			client_name = "(❗) " .. client_name
+			vim.fn.matchadd("Error", "Has executable  : \\zsfalse\\ze")
+		end
         set_lines(buf, set_level({ client_name }, 2), "String")
         for prop_name, prop_value in pairs(client_props) do
             set_lines(
@@ -109,13 +124,13 @@ local do_client_stuff = function(buf)
 end
 
 function Info.display()
-    local on_buf = vim.api.nvim_get_current_buf()
+    Info.on_buf = vim.api.nvim_get_current_buf()
     local buf, _ = create_info_window()
 
     set_lines(buf, center(config.header), "TSConstructor")
     empty()
 
-    set_lines(buf, set_level({ "Active Clients on current Buffer: " }, 1), "Function")
+    set_lines(buf, set_level({ "Servers for current buffer:" }, 1), "Function")
     do_client_stuff(buf)
     empty()
 
@@ -125,7 +140,7 @@ function Info.display()
     set_lines(buf, set_level({ vim.fn.join(installed, ", ") }, 2), "String")
     empty()
 
-    local available_servers = require("lspmanager.utilities").available_for_filetype(on_buf)
+    local available_servers = utils.available_for_filetype(Info.on_buf)
     local suggestions = {}
     for _, lsp_name in pairs(available_servers) do
         if require("lspmanager").is_lsp_installed(lsp_name) == 0 then
@@ -140,7 +155,9 @@ function Info.display()
         empty()
     end
 
-    set_lines(buf, set_level({ "Find logs at: " .. vim.fn.stdpath("cache") .. "/lsp.log" }, 1), "TSVariable")
+    set_lines(buf, set_level({ "Find logs at: " .. vim.lsp.get_log_path() }, 1), "TSVariable")
+
+    vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end
 
 return Info
