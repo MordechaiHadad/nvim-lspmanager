@@ -56,7 +56,7 @@ local function empty()
 end
 
 local function center(tbl)
-    local w = (vim.api.nvim_win_get_width(0) - #config.header[1])/2 - 1
+    local w = (vim.api.nvim_win_get_width(0) - #config.header[1]) / 2 - 1
     local pad = (" "):rep(math.floor(w))
 
     local new_tbl = {}
@@ -71,22 +71,22 @@ local function get_active_clients()
     local clients_table = {}
     local available_servers = utils.available_for_filetype(Info.on_buf)
 
-	local config_list = {}
-	for _,config_name in ipairs(available_servers) do
-		local server_config = require("lspconfig/configs")[config_name]
-		table.insert(config_list, server_config)
-	end
+    local config_list = {}
+    for _, config_name in ipairs(available_servers) do
+        local server_config = require("lspconfig/configs")[config_name]
+        table.insert(config_list, server_config)
+    end
 
     for _, item in ipairs(config_list) do
         local client = item.name
-		local default_conf = item.document_config.default_config
+        local default_conf = item.document_config.default_config
 
         clients_table[client] = {}
-		clients_table[client]["Autostart"] = item["autostart"]
-		clients_table[client]["Full Command"] = vim.fn.join(item["cmd"], " ")
-		clients_table[client]["Root Directory"] = item.get_root_dir(vim.api.nvim_buf_get_name(Info.on_buf))
+        clients_table[client]["Autostart"] = item["autostart"]
+        clients_table[client]["Full Command"] = vim.fn.join(item["cmd"], " ")
+        clients_table[client]["Root Directory"] = item.get_root_dir(vim.api.nvim_buf_get_name(Info.on_buf))
         clients_table[client]["cmd"] = default_conf["cmd_cwd"]
-		clients_table[client]["Has executable"] = vim.fn.executable(item["cmd"][1]) == 1
+        clients_table[client]["Has executable"] = vim.fn.executable(item["cmd"][1]) == 1
 
         -- clients_table[client]["Initialized"] = config["initialized"]
         -- clients_table[client]["id"] = config["id"]
@@ -106,10 +106,10 @@ local do_client_stuff = function(buf)
         return
     end
     for client_name, client_props in pairs(total_clients) do
-		if not client_props["Has executable"] then
-			client_name = "(❗) " .. client_name
-			vim.fn.matchadd("Error", "Has executable  : \\zsfalse\\ze")
-		end
+        if not client_props["Has executable"] then
+            client_name = "(❗) " .. client_name
+            vim.fn.matchadd("Error", "Has executable  : \\zsfalse\\ze")
+        end
         set_lines(buf, set_level({ client_name }, 2), "String")
         for prop_name, prop_value in pairs(client_props) do
             set_lines(
