@@ -8,6 +8,7 @@ local servers_list = require("lspmanager.utilities").servers_list
 local enable_gdscript = nil
 
 lspmanager.setup = function(user_configs)
+    user_configs = user_configs or {}
     servers = require("lspmanager.servers").set(user_configs.lsps or {})
 	-- Setting info customisation
 	require("lspmanager.info.config").setup(user_configs.info or {})
