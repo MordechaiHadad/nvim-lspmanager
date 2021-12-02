@@ -1,7 +1,7 @@
 local Info = {}
 local ns = vim.api.nvim_create_namespace("lspmanager_info")
 local config_file = require("lspmanager.info.config")
-local utils = require("lspmanager.utilities")
+local lspmanager = require("lspmanager")
 local config = config_file.options
 
 local function create_info_window()
@@ -69,7 +69,7 @@ end
 
 local function get_active_clients()
     local clients_table = {}
-    local available_servers = utils.available_for_filetype(Info.on_buf)
+    local available_servers = lspmanager.suggested_servers(Info.on_buf)
 
     local config_list = {}
     for _, config_name in ipairs(available_servers) do
@@ -140,7 +140,7 @@ function Info.display()
     set_lines(buf, set_level({ vim.fn.join(installed, ", ") }, 2), "String")
     empty()
 
-    local available_servers = utils.available_for_filetype(Info.on_buf)
+    local available_servers = lspmanager.suggested_servers(Info.on_buf)
     local suggestions = {}
     for _, lsp_name in pairs(available_servers) do
         if require("lspmanager").is_lsp_installed(lsp_name) == 0 then

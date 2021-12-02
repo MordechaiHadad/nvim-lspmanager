@@ -1,20 +1,5 @@
 local utilities = {}
 
-function utilities.available_for_filetype(on_buf)
-    local available = require("lspmanager").available_servers()
-    local available_for_filetype = {}
-    for _, lsp_name in pairs(require("lspmanager.servers").get()) do
-        local server = require("lspmanager.servers." .. lsp_name)
-        if vim.tbl_contains(available, lsp_name) then
-            local current = vim.bo[on_buf or 0].ft
-            if vim.tbl_contains(server.config.document_config.default_config.filetypes, current) then
-                table.insert(available_for_filetype, lsp_name)
-            end
-        end
-    end
-    return available_for_filetype
-end
-
 function utilities.get_config(name)
     -- needed so we can restore the initial state at the end
     local was_config_set = require("lspconfig.configs")[name]

@@ -13,6 +13,7 @@ lspmanager.setup = function(user_configs)
 	-- require("lspmanager.info.config").setup(user_configs.info or {})
     enable_gdscript = user_configs.enable_gdscript or false
     lspmanager.setup_servers(false, nil)
+    vim.notify(vim.inspect(configs.sumneko_lua))
     lspmanager.ensure_installed(user_configs.ensure_installed or {})
 end
 
@@ -52,9 +53,9 @@ end
 
 lspmanager.setup_servers = function(is_install, lsp)
     if is_install then
-        local server_config = servers[lsp].config
+        local server = require("lspmanager.servers").get(lsp_name)
+        local server_config = server.config
         local path = get_path(lsp)
-
         local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
         if config.default_config.cmd then
             local executable = config.default_config.cmd[1]
@@ -145,7 +146,7 @@ lspmanager.install = function(lsp)
         elseif #available_for_filetype == 0 then
             error("no server found for filetype " .. filetype)
         elseif #available_for_filetype > 1 then
-            error(
+            print(
                 "multiple servers found ("
                     .. table.concat(available_for_filetype, "/")
                     .. "), please install one of them"
