@@ -69,11 +69,12 @@ end
 
 local function get_active_clients()
     local clients_table = {}
+    print(Info.on_buf)
     local available_servers = lspmanager.suggested_servers(Info.on_buf)
 
     local config_list = {}
     for _, config_name in ipairs(available_servers) do
-        local server_config = require("lspconfig/configs")[config_name]
+        local server_config = require("lspconfig.configs")[config_name]
         table.insert(config_list, server_config)
     end
 
@@ -124,7 +125,7 @@ local do_client_stuff = function(buf)
 end
 
 function Info.display()
-    Info.on_buf = vim.api.nvim_get_current_buf()
+    Info.on_buf = vim.bo.filetype
     local buf, _ = create_info_window()
 
     set_lines(buf, center(config.header), "TSConstructor")

@@ -1,7 +1,6 @@
 local lspmanager = {}
 
 local servers = require("lspmanager.servers").get()
-local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
 local enable_gdscript = nil
@@ -27,9 +26,10 @@ end
 lspmanager.suggested_servers = function(filetype)
     local available = lspmanager.available_servers()
     local available_for_filetype = {}
-    for lsp_name, server in pairs(servers) do
+    for _, lsp_name in pairs(servers) do
+        local server = require("lspmanager.servers").get(lsp_name)
         if vim.tbl_contains(available, lsp_name) then
-            if vim.tbl_contains(server.config.default_config.filetypes, filetype) then
+            if vim.tbl_contains(server.config.document_config.default_config.filetypes, filetype) then
                 table.insert(available_for_filetype, lsp_name)
             end
         end
@@ -60,9 +60,8 @@ lspmanager.setup_servers = function(lsp)
         end
     else
         local server = require("lspmanager.servers").get(lsp)
-        local server_config = server.config
+        local config = server.config
         local path = get_path(lsp)
-        local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
         if config.cmd then
             local executable = config.cmd[1]
             if vim.regex([[\.\/]]):match_str(executable) then
@@ -79,9 +78,9 @@ lspmanager.setup_servers = function(lsp)
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-            require("lspconfig")[lsp].setup({
-                capabilities = capabilities,
-            })
+            config.capabilities = capabilities
+
+            require("lspconfig")[lsp].setup(config)
         else
             require("lspconfig")[lsp].setup(config)
         end
@@ -96,8 +95,7 @@ lspmanager.install = function(lsp)
             error("No file attached in current buffer, aborting...")
         end
 
-        local available_for_filetype = require("lspmanager.utilities").available_for_filetype()
-
+        local available_for_filetype = require("lspmanager").suggested_servers(vim.bo.filetype)
         if #available_for_filetype == 1 then
             for _, config in pairs(vim.lsp.get_active_clients()) do
                 if config.name == available_for_filetype[1] then
@@ -109,7 +107,7 @@ lspmanager.install = function(lsp)
             local path = get_path(available_for_filetype[1])
             vim.fn.mkdir(path, "p")
 
-            print("installing " .. available_for_filetype[1] .. " for current file type...")
+            print("Installing " .. available_for_filetype[1] .. " for current file type...")
             jobs.installation_job(available_for_filetype[1], path, false)
         elseif #available_for_filetype == 0 then
             error("no server found for filetype " .. filetype)
