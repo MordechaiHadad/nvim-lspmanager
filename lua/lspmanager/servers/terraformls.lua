@@ -8,7 +8,7 @@ if os.get_os() == os.OSes.Windows then
     cmd_exec = cmd_exec .. ".exe"
 end
 
-config.cmd = cmd_exec
+config.cmd = {cmd_exec}
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then
