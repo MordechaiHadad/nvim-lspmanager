@@ -12,8 +12,7 @@ lspmanager.setup = function(user_configs)
 
 	-- require("lspmanager.info.config").setup(user_configs.info or {})
     enable_gdscript = user_configs.enable_gdscript or false
-    lspmanager.setup_servers(false, nil)
-    vim.notify(vim.inspect(configs.sumneko_lua))
+    lspmanager.setup_servers(nil)
     lspmanager.ensure_installed(user_configs.ensure_installed or {})
 end
 
@@ -51,26 +50,30 @@ lspmanager.installed_servers = function(opts)
     return res
 end
 
-lspmanager.setup_servers = function(is_install, lsp)
-    if is_install then
-        local server = require("lspmanager.servers").get(lsp_name)
+lspmanager.setup_servers = function(lsp)
+    if lsp == nil then
+        for _, lsp_name in pairs(lspmanager.installed_servers()) do
+            lspmanager.setup_servers(lsp_name)
+        end
+        if enable_gdscript then
+            require("lspconfig").gdscript.setup({})
+        end
+    else
+        local server = require("lspmanager.servers").get(lsp)
         local server_config = server.config
         local path = get_path(lsp)
         local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
-        if config.default_config.cmd then
-            local executable = config.default_config.cmd[1]
+        if config.cmd then
+            local executable = config.cmd[1]
             if vim.regex([[\.\/]]):match_str(executable) then
-                config.default_config.cmd[1] = path .. "/" .. executable
+                config.cmd[1] = path .. "/" .. executable
             end
 
             if lsp == "sumneko_lua" then
-                local main = config.default_config.cmd[3]
-                config.default_config.cmd[3] = path .. "/" .. main
+                local main = config.cmd[3]
+                config.cmd[3] = path .. "/" .. main
             end
         end
-
-        config = vim.tbl_deep_extend("force", config, servers[lsp])
-        configs[lsp] = config
 
         if require("lspmanager.utilities").is_vscode_lsp(lsp) then
             local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -82,41 +85,6 @@ lspmanager.setup_servers = function(is_install, lsp)
         else
             require("lspconfig")[lsp].setup(config)
         end
-        return
-    end
-    for _, lsp_name in pairs(servers) do
-        if lspmanager.is_lsp_installed(lsp_name) == 1 and not configs[lsp_name] then
-            local path = get_path(lsp_name)
-            local server = require("lspmanager.servers").get(lsp_name)
-            local server_config = server.config
-            local config = vim.tbl_deep_extend("keep", server_config, {  default_config = { cmd_cwd = path } })
-            if config.default_config.cmd then
-                local executable = config.default_config.cmd[1]
-                if vim.regex([[\.\/]]):match_str(executable) then
-                    config.cmd[1] = path .. "/" .. executable
-                end
-                if lsp_name == "sumneko_lua" then
-                    local main = config.default_config.cmd[3]
-                    config.cmd[3] = path .. "/" .. main
-                end
-            end
-            config = vim.tbl_deep_extend("force", config, server.config)
-            configs[lsp_name] = config
-
-            if require("lspmanager.utilities").is_vscode_lsp(lsp_name) then
-                local capabilities = vim.lsp.protocol.make_client_capabilities()
-                capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-                require("lspconfig")[lsp_name].setup({
-                    capabilities = capabilities,
-                })
-            else
-                require("lspconfig")[lsp_name].setup(config)
-            end
-        end
-    end
-    if enable_gdscript then
-        require("lspconfig").gdscript.setup({})
     end
 end
 
