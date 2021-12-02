@@ -4,14 +4,13 @@ local servers = require("lspmanager.servers").get()
 local configs = require("lspconfig/configs")
 local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
-local servers_list = require("lspmanager.utilities").servers_list
 local enable_gdscript = nil
 
 lspmanager.setup = function(user_configs)
     user_configs = user_configs or {}
-    servers = require("lspmanager.servers").set(user_configs.lsps or {})
-	-- Setting info customisation
-	require("lspmanager.info.config").setup(user_configs.info or {})
+    -- servers = require("lspmanager.servers").set(user_configs.lsps or {})
+
+	-- require("lspmanager.info.config").setup(user_configs.info or {})
     enable_gdscript = user_configs.enable_gdscript or false
     lspmanager.setup_servers(false, nil)
     lspmanager.ensure_installed(user_configs.ensure_installed or {})
@@ -22,7 +21,7 @@ lspmanager.is_lsp_installed = function(lsp)
 end
 
 lspmanager.available_servers = function()
-    return vim.tbl_values(servers_list)
+    return vim.tbl_values(servers)
 end
 
 lspmanager.suggested_servers = function(filetype)
@@ -80,26 +79,27 @@ lspmanager.setup_servers = function(is_install, lsp)
                 capabilities = capabilities,
             })
         else
-            require("lspconfig")[lsp].setup({})
+            require("lspconfig")[lsp].setup(config)
         end
         return
     end
-    for _, lsp_name in pairs(servers_list) do
-        local path = get_path(lsp_name)
-        local server_config = servers[lsp_name].config
+    for _, lsp_name in pairs(servers) do
         if lspmanager.is_lsp_installed(lsp_name) == 1 and not configs[lsp_name] then
-            local config = vim.tbl_deep_extend("keep", server_config, { default_config = { cmd_cwd = path } })
+            local path = get_path(lsp_name)
+            local server = require("lspmanager.servers").get(lsp_name)
+            local server_config = server.config
+            local config = vim.tbl_deep_extend("keep", server_config, {  default_config = { cmd_cwd = path } })
             if config.default_config.cmd then
                 local executable = config.default_config.cmd[1]
                 if vim.regex([[\.\/]]):match_str(executable) then
-                    config.default_config.cmd[1] = path .. "/" .. executable
+                    config.cmd[1] = path .. "/" .. executable
                 end
                 if lsp_name == "sumneko_lua" then
                     local main = config.default_config.cmd[3]
-                    config.default_config.cmd[3] = path .. "/" .. main
+                    config.cmd[3] = path .. "/" .. main
                 end
             end
-            config = vim.tbl_deep_extend("force", config, servers[lsp_name].config)
+            config = vim.tbl_deep_extend("force", config, server.config)
             configs[lsp_name] = config
 
             if require("lspmanager.utilities").is_vscode_lsp(lsp_name) then
@@ -110,7 +110,7 @@ lspmanager.setup_servers = function(is_install, lsp)
                     capabilities = capabilities,
                 })
             else
-                require("lspconfig")[lsp_name].setup({})
+                require("lspconfig")[lsp_name].setup(config)
             end
         end
     end

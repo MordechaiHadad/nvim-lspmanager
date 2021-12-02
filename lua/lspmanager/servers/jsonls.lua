@@ -9,7 +9,7 @@ if os.get_os() == os.OSes.Windows then
     cmd_exec = cmd_exec .. ".cmd"
 end
 
-config.default_config.cmd[1] = cmd_exec
+config.cmd = {cmd_exec}
 
 return {
     config = config,

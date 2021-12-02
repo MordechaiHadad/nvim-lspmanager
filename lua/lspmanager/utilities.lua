@@ -3,11 +3,11 @@ local utilities = {}
 function utilities.available_for_filetype(on_buf)
     local available = require("lspmanager").available_servers()
     local available_for_filetype = {}
-    for _, lsp_name in pairs(utilities.servers_list) do
+    for _, lsp_name in pairs(require("lspmanager.servers").get()) do
         local server = require("lspmanager.servers." .. lsp_name)
         if vim.tbl_contains(available, lsp_name) then
             local current = vim.bo[on_buf or 0].ft
-            if vim.tbl_contains(server.config.default_config.filetypes, current) then
+            if vim.tbl_contains(server.config.document_config.default_config.filetypes, current) then
                 table.insert(available_for_filetype, lsp_name)
             end
         end
@@ -21,7 +21,7 @@ function utilities.get_config(name)
     local was_package_loaded = package.loaded["lspconfig." .. name]
 
     -- gets or requires config
-    local config = require("lspconfig")[name].document_config
+    local config = require("lspconfig")[name]
 
     -- restore the initial state
     if not was_config_set then
@@ -52,37 +52,5 @@ function utilities.is_vscode_lsp(lsp)
     end
     return false
 end
-
-utilities.servers_list = {
-    "angularls",
-    "bashls",
-    "clangd",
-    "clojure_lsp",
-    "cmake",
-    "cssls",
-    "dockerls",
-    "elixirls",
-    "elmls",
-    "emmet_ls",
-    "fsautocomplete",
-    "hls",
-    "html",
-    "jsonls",
-    "kotlinls",
-    "omnisharp",
-    "purescriptls",
-    "pyright",
-    "rust_analyzer",
-    "solang",
-    "sumneko_lua",
-    "svelte",
-    "tailwindcss",
-    "terraformls",
-    "texlab",
-    "tsserver",
-    "vimls",
-    "volar",
-    "vuels",
-}
 
 return utilities

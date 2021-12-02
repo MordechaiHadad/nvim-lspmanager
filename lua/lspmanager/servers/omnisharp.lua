@@ -9,7 +9,7 @@ else
     cmd_exec = "./run"
 end
 
-config.default_config.cmd = { cmd_exec, "--languageserver", "--hostPID", tostring(vim.fn.getpid()) }
+config.cmd = { cmd_exec, "--languageserver", "--hostPID", tostring(vim.fn.getpid()) }
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then

@@ -2,7 +2,7 @@ local lsp_name = "fsautocomplete"
 local config = require("lspmanager.utilities").get_config(lsp_name)
 local installer = require("lspmanager.installers.dotnet")
 
-config.default_config.cmd[2] = "fsautocomplete"
+config.cmd = {"fsautocomplete"}
 
 return {
     config = config,
