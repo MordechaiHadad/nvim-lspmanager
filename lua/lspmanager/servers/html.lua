@@ -1,5 +1,5 @@
 local lsp_name = "html"
-local config = require("lspmanager.utilities").get_config(lsp_name)
+local config = require("lspmanager.utilities").get_config(lsp_name).document_config.default_config
 local installers = require("lspmanager.installers")
 local os = require("lspmanager.os")
 
@@ -9,7 +9,7 @@ if os.get_os() == os.OSes.Windows then
     cmd_exec = cmd_exec .. ".cmd"
 end
 
-config.cmd = {cmd_exec}
+config.cmd[1] = cmd_exec
 
 return {
     config = config,

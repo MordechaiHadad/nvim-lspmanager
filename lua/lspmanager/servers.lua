@@ -13,7 +13,7 @@ local servers = {
     "hls",
     "html",
     "jsonls",
-    "kotlinls",
+    "kotlin_language_server",
     "omnisharp",
     "purescriptls",
     "pyright",

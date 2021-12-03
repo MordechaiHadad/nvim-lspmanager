@@ -69,7 +69,6 @@ end
 
 local function get_active_clients()
     local clients_table = {}
-    print(Info.on_buf)
     local available_servers = lspmanager.suggested_servers(Info.on_buf)
 
     local config_list = {}

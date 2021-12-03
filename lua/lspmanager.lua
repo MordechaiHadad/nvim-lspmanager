@@ -27,9 +27,9 @@ lspmanager.suggested_servers = function(filetype)
     local available = lspmanager.available_servers()
     local available_for_filetype = {}
     for _, lsp_name in pairs(servers) do
-        local server = require("lspmanager.servers").get(lsp_name)
+        local config = require("lspmanager.utilities").get_config(lsp_name)
         if vim.tbl_contains(available, lsp_name) then
-            if vim.tbl_contains(server.config.document_config.default_config.filetypes, filetype) then
+            if vim.tbl_contains(config.document_config.default_config.filetypes, filetype) then
                 table.insert(available_for_filetype, lsp_name)
             end
         end
@@ -122,7 +122,7 @@ lspmanager.install = function(lsp)
         return
     end
 
-    if not servers[lsp] then
+    if not vim.tbl_contains(servers, lsp) then
         error("could not find LSP " .. lsp)
     end
 
