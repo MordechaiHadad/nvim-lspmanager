@@ -9,7 +9,7 @@ else
     cmd_exec = "./run"
 end
 
-config.default_config.cmd = { cmd_exec, "--languageserver", "--hostPID", tostring(vim.fn.getpid()) }
+config.cmd = { cmd_exec, "--languageserver", "--hostPID", tostring(vim.fn.getpid()) }
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then
@@ -63,7 +63,9 @@ local function install_script()
     ]]
 end
 
-return vim.tbl_extend("error", config, {
+return {
+    config = config,
+
     on_new_config = function(new_config, new_root_dir)
         if new_root_dir ~= nil then
             table.insert(new_config.cmd, "-s")
@@ -76,4 +78,4 @@ return vim.tbl_extend("error", config, {
     update_script = function()
         return require("lspmanager.installers.manual").update_script("OmniSharp/omnisharp-roslyn")
     end,
-})
+}

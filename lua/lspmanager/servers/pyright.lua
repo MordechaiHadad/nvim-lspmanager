@@ -9,9 +9,11 @@ if os.get_os() == os.OSes.Windows then
     cmd_exec = cmd_exec .. ".cmd"
 end
 
-config.default_config.cmd[1] = cmd_exec
+config.cmd = {cmd_exec}
 
-return vim.tbl_extend("error", config, {
+return {
+    config = config,
+
     install_script = function()
         return installers.npm.install_script({ "pyright" })
     end,
@@ -19,4 +21,4 @@ return vim.tbl_extend("error", config, {
     update_script = function()
         return installers.npm.update_script()
     end,
-})
+}

@@ -1,30 +1,54 @@
 local servers = {
-    ["angularls"] = require("lspmanager.servers.angularls"),
-    ["bashls"] = require("lspmanager.servers.bashls"),
-    ["clangd"] = require("lspmanager.servers.clangd"),
-    ["cmake"] = require("lspmanager.servers.cmake"),
-    ["cssls"] = require("lspmanager.servers.cssls"),
-    ["dockerls"] = require("lspmanager.servers.dockerls"),
-    ["elixirls"] = require("lspmanager.servers.elixirls"),
-    ["elmls"] = require("lspmanager.servers.elmls"),
-    ["emmet_ls"] = require("lspmanager.servers.emmet_ls"),
-    ["fsautocomplete"] = require("lspmanager.servers.fsautocomplete"),
-    ["gopls"] = require("lspmanager.servers.gopls"),
-    ["hls"] = require("lspmanager.servers.hls"),
-    ["html"] = require("lspmanager.servers.html"),
-    -- ["jdtls"] = require("lspmanager.servers.jdtls"),
-    ["jsonls"] = require("lspmanager.servers.jsonls"),
-    ["kotlinls"] = require("lspmanager.servers.kotlinls"),
-    ["omnisharp"] = require("lspmanager.servers.omnisharp"),
-    ["pyright"] = require("lspmanager.servers.pyright"),
-    ["rust_analyzer"] = require("lspmanager.servers.rust_analyzer"),
-    ["sumneko_lua"] = require("lspmanager.servers.sumneko_lua"),
-    ["svelte"] = require("lspmanager.servers.svelte"),
-    ["tailwindcss"] = require("lspmanager.servers.tailwindcss"),
-    ["terraformls"] = require("lspmanager.servers.terraformls"),
-    ["tsserver"] = require("lspmanager.servers.tsserver"),
-    ["vimls"] = require("lspmanager.servers.vimls"),
-    ["vuels"] = require("lspmanager.servers.vuels"),
+    "angularls",
+    "bashls",
+    "clangd",
+    "clojure_lsp",
+    "cmake",
+    "cssls",
+    "dockerls",
+    "elixirls",
+    "elmls",
+    "emmet_ls",
+    "fsautocomplete",
+    "hls",
+    "html",
+    "jsonls",
+    "kotlin_language_server",
+    "omnisharp",
+    "purescriptls",
+    "pyright",
+    "rust_analyzer",
+    "solang",
+    "sumneko_lua",
+    "svelte",
+    "tailwindcss",
+    "terraformls",
+    "texlab",
+    "tsserver",
+    "vimls",
+    "volar",
+    "vuels",
 }
 
-return servers
+return {
+    get = function(server_name)
+        if server_name then
+            return require("lspmanager.servers." .. server_name)
+        end
+        return servers
+    end,
+
+    set = function(user_configs)
+        vim.validate({ user_configs = { user_configs, "table" } })
+
+        for name, configuration in pairs(user_configs) do
+            servers[name] = vim.tbl_deep_extend("force", servers[name], {
+                config = {
+                    default_config = configuration,
+                },
+            })
+        end
+
+        return servers
+    end,
+}

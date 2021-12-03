@@ -13,17 +13,7 @@ else
     cmd_exec = cmd_exec .. "Linux/lua-language-server"
 end
 
-config.default_config.cmd = { cmd_exec, "-E", "./extension/server/main.lua" }
-config.default_config.settings = {
-    Lua = {
-        telemetry = {
-            enable = false,
-        },
-        workspace = {
-            preloadFileSize = 180,
-        },
-    },
-}
+config.cmd = { cmd_exec, "-E", "./extension/server/main.lua" }
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then
@@ -81,10 +71,12 @@ local function install_script()
             ]]
 end
 
-return vim.tbl_extend("error", config, {
+return {
+    config = config,
+
     install_script = install_script,
 
     update_script = function()
         return require("lspmanager.installers.manual").update_script("sumneko/vscode-lua")
     end,
-})
+}

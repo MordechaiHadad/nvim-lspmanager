@@ -1,15 +1,13 @@
-local lsp_name = "kotlin_language_server"
+local lsp_name = "texlab"
 local config = require("lspmanager.utilities").get_config(lsp_name)
-local installers = require("lspmanager.installers")
 local os = require("lspmanager.os")
 
-local cmd_exec = "./server/bin/kotlin-language-server"
-
-if os.get_os == os.OSes.Windows then
-    cmd_exec = cmd_exec .. ".bat"
+local cmd_exec = "./texlab"
+if os.get_os() == os.OSes.Windows then
+    cmd_exec = cmd_exec .. ".exe"
 end
 
-config.default_config.cmd[1] = cmd_exec
+config.cmd = {cmd_exec}
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then
@@ -17,22 +15,22 @@ local function install_script()
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
         function get_latest_version() {
-            $response = Invoke-RestMethod -Uri "https://api.github.com/repos/fwcd/kotlin-language-server/releases/latest"
+            $response = invoke-restmethod -uri "https://api.github.com/repos/latex-lsp/texlab/releases/latest"
             return $response.tag_name
         }
 
         $version = get_latest_version
-        $url = "https://github.com/fwcd/kotlin-language-server/releases/download/$($version)/server.zip"
-        $out = "server.zip"
+        $url = "https://github.com/latex-lsp/texlab/releases/download/$($version)/texlab-x86_64-windows.zip"
+        $out = "texlab.zip"
         
         if (Test-Path -Path Get-Location) {
             Remove-Item Get-Location -Force -Recurse
         }
-        
+
         Invoke-WebRequest -Uri $url -OutFile $out
-        
+
         Add-Type -AssemblyName System.IO.Compression.FileSystem
-        [System.IO.Compression.ZipFile]::ExtractToDirectory($out, "server")
+        [System.IO.Compression.ZipFile]::ExtractToDirectory($out, ".")
         
         Out-File -FilePath VERSION -Encoding string -InputObject "$($version)"
         Remove-Item $out
@@ -45,30 +43,33 @@ local function install_script()
     fi
 
     os=$(uname -s | tr "[:upper:]" "[:lower:]")
-    version=$(curl -s "https://api.github.com/repos/fwcd/kotlin-language-server/releases/latest" | jq -r '.tag_name')
+    architecture=$(uname -m | tr "[:upper:]" "[:lower:]")
+    version=$(curl -s "https://api.github.com/repos/latex-lsp/texlab/releases/latest" | jq -r '.tag_name')
 
     case $os in
     linux)
     platform="linux"
     ;;
     darwin)
-    platform="mac"
+    platform="macos"
     ;;
     esac
 
-    curl -L -o "server.zip" "https://github.com/fwcd/kotlin-language-server/releases/download/$version/server.zip"
-    unzip server.zip
+    curl -L -o "texlab.tar.gz" "https://github.com/latex-lsp/texlab/releases/download/$version/texlab-x86_64-$platform.tar.gz"
 
-    rm server.zip
+    tar -xf texlab.tar.gz
+    rm -rf texlab.tar.gz
 
     echo $version > VERSION
     ]]
 end
 
-return vim.tbl_extend("error", config, {
+return {
+    config = config,
+
     install_script = install_script,
 
     update_script = function()
-        return installers.manual.update_script("fwcd/kotlin-language-server")
+        return require("lspmanager.installers.manual").update_script("latex-lsp/texlab")
     end,
-})
+}

@@ -1,17 +1,15 @@
-local lsp_name = "elixirls"
+local lsp_name = "kotlin_language_server"
 local config = require("lspmanager.utilities").get_config(lsp_name)
 local installers = require("lspmanager.installers")
 local os = require("lspmanager.os")
 
-local cmd_exec = "./language_server"
+local cmd_exec = "./server/bin/kotlin-language-server"
 
 if os.get_os == os.OSes.Windows then
     cmd_exec = cmd_exec .. ".bat"
-else
-    cmd_exec = cmd_exec .. ".sh"
 end
 
-config.cmd = { cmd_exec }
+config.cmd = {cmd_exec}
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then
@@ -19,13 +17,13 @@ local function install_script()
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
         function get_latest_version() {
-            $response = Invoke-RestMethod -Uri "https://api.github.com/repos/elixir-lsp/elixir-ls/releases/latest"
+            $response = Invoke-RestMethod -Uri "https://api.github.com/repos/fwcd/kotlin-language-server/releases/latest"
             return $response.tag_name
         }
 
         $version = get_latest_version
-        $url = "https://github.com/elixir-lsp/elixir-ls/releases/download/$($version)/elixir-ls.zip"
-        $out = "elixir-ls.zip"
+        $url = "https://github.com/fwcd/kotlin-language-server/releases/download/$($version)/server.zip"
+        $out = "server.zip"
         
         if (Test-Path -Path Get-Location) {
             Remove-Item Get-Location -Force -Recurse
@@ -34,11 +32,10 @@ local function install_script()
         Invoke-WebRequest -Uri $url -OutFile $out
         
         Add-Type -AssemblyName System.IO.Compression.FileSystem
-        [System.IO.Compression.ZipFile]::ExtractToDirectory($out, ".")
+        [System.IO.Compression.ZipFile]::ExtractToDirectory($out, "server")
         
-        Remove-Item $out
-
         Out-File -FilePath VERSION -Encoding string -InputObject "$($version)"
+        Remove-Item $out
         ]]
     end
     return [[
@@ -48,12 +45,21 @@ local function install_script()
     fi
 
     os=$(uname -s | tr "[:upper:]" "[:lower:]")
-    version=$(curl -s "https://api.github.com/repos/elixir-lsp/elixir-ls/releases/latest" | jq -r '.tag_name')
+    version=$(curl -s "https://api.github.com/repos/fwcd/kotlin-language-server/releases/latest" | jq -r '.tag_name')
 
-    curl -L -o "elixir-ls.zip" "https://github.com/elixir-lsp/elixir-ls/releases/download/$version/elixir-ls.zip"
-    unzip elixir-ls.zip
+    case $os in
+    linux)
+    platform="linux"
+    ;;
+    darwin)
+    platform="mac"
+    ;;
+    esac
 
-    rm elixir-ls.zip
+    curl -L -o "server.zip" "https://github.com/fwcd/kotlin-language-server/releases/download/$version/server.zip"
+    unzip server.zip
+
+    rm server.zip
 
     echo $version > VERSION
     ]]
@@ -65,6 +71,6 @@ return {
     install_script = install_script,
 
     update_script = function()
-        return installers.manual.update_script("elixir-lsp/elixir-ls")
+        return installers.manual.update_script("fwcd/kotlin-language-server")
     end,
 }

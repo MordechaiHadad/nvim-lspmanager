@@ -1,3 +1,9 @@
+<div align="center">
+
+<img src="res/nvim-lspmanager.png" width=315>
+
+</div>
+
 # Nvim-lspmanager
 
 Nvim-lspmanager is a powerful and extensible manager for LSPs (Language Server Protocols).
@@ -14,14 +20,31 @@ Using pre-made configurations from [nvim-lspconfig](https://github.com/neovim/nv
 ## :wrench: Installation
 Make sure to use Neovim version 0.5.x or higher.
 #### Dependencies
-Make sure you have the following packages installed:
+Make sure you have the following packages installed (some dependencies are responsible for others i.e dotnet LSPs download via `dotnet`):
 
-- `jq`
-- `curl`
-- `npm`
-- `gzip`
+<details>
+    <summary>Unix</summary>
+
+- [`jq`](https://github.com/stedolan/jq)
+- [`curl`](https://github.com/curl/curl)
+- [`npm`](https://github.com/npm/cli)
+- [`gzip`](https://github.com/nicklockwood/GZIP)
 - `unzip`
-- `pip`
+- [`pip`](https://github.com/pypa/pip)
+- [`dotnet`](https://github.com/microsoft/dotnet)
+- [`go`](https://github.com/golang/go)
+
+</details>
+
+<details>
+    <summary>Windows</summary>
+
+- [`npm`](https://github.com/npm/cli)
+- [`dotnet`](https://github.com/microsoft/dotnet)
+- [`pip`](https://github.com/pypa/pip)
+- [`go`](https://github.com/golang/go)
+
+</details>
 
 - [Packer](https://github.com/wbthomason/packer.nvim)
 ```lua
@@ -48,7 +71,7 @@ lua << EOF
 EOF
 ```
 
-## Usage
+## :question: Usage
 
 - `:LspInstall ...`: Installs a supported language server
 - `:LspUninstall ...:` Uninstall an installed language server
@@ -58,15 +81,67 @@ EOF
 
 nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) to install, uninstall and update language servers.
 
-- `:Telescope lspmanager` Is used for selecting either one of these options: `lsp_install`, `lsp_uninstall`, `lsp_update`
+- `:Telescope lspmanager` is used for selecting either one of these options: `lsp_install`, `lsp_uninstall`, `lsp_update`
 
-## Supported language servers
+## Customization
+
+You can declare which LSPs you want installed by adding the `ensure_installed` variable to nvim-lspmanager's `setup()` function:
+```lua
+require('lspmanager').setup({
+    ensure_installed = {
+        "sumneko_lua",
+        "pyright",
+    }
+})
+```
+
+The header text for `:LspInfoo` can be changed by adding the following lines of code to your config:
+```lua
+require('lspmanager').setup({
+    info = { 
+        header = {
+            [[▀█▀]],
+            [[░█░]],
+            [[░▀░]],
+    },},
+})
+```
+
+Example `nvim-lspmanager` config:
+```lua
+local luadev = require("lua-dev").setup({
+    library = {
+        vimruntime = true,
+        types = true,
+        plugins = false,
+    },
+    lspconfig = {
+        on_attach = function(client)
+            require("illuminate").on_attach(client)
+        end,
+    },
+})
+
+require("lspmanager").setup({
+    lsps = {
+        sumneko_lua = luadev,
+        rust_analyzer = {
+            on_attach = function(client)
+                require("illuminate").on_attach(client)
+            end,
+        },
+    },
+})
+```
+
+## :white_check_mark: Supported language servers
 
 |                    | Language                                       | Language server     |
 | :----------------- | :--------------------------------------------- | :--------------------------------------------------------------------------- |
 | :white_check_mark: | Angular                                        | `angularls`         |
 | :white_check_mark: | Bash                                           | `bashls`            |
 | :white_check_mark: | C/C++                                          | `clangd`            |
+| :white_check_mark: | Clojure                                        | `clojure_lsp`       |
 | :white_check_mark: | CMake                                          | `cmake`             |
 | :white_check_mark: | CSS                                            | `cssls`             |
 | :white_check_mark: | Docker                                         | `dockerls`          |
@@ -78,16 +153,20 @@ nvim-lspmanager integrates [telescope.nvim](https://github.com/nvim-telescope/te
 | :white_check_mark: | JSON                                           | `jsonls`            |
 | :white_check_mark: | Kotlin                                         | `kotlinls`          |
 | :white_check_mark: | CSharp                                         | `omnisharp`         |
+| :white_check_mark: | PureScript                                     | `purescriptls`      |
 | :white_check_mark: | Python                                         | `pyright`           |
 | :white_check_mark: | Rust                                           | `rust_analyser`     |
+| :white_check_mark: | Solidity                                       | `solang`            |
 | :white_check_mark: | Lua                                            | `sumneko_lua`       |
 | :white_check_mark: | Svelte                                         | `sveltels`          |
 | :white_check_mark: | Tailwindcss                                    | `tailwindcssls`     |
 | :white_check_mark: | Terraform                                      | `terraformls`       |
+| :white_check_mark: | LaTex                                          | `texlab`            |
 | :white_check_mark: | Javascript/Typescript                          | `tsserver`          |
 | :white_check_mark: | VimL                                           | `vimls`             |
+| :white_check_mark: | Volar                                          | `volar`           |
 | :white_check_mark: | Vuejs                                          | `vuels`             | 
 
-## Credits
+## :heart: Credits
 
-- Big thanks to [lspinstall](https://github.com/kabouzeid/nvim-lspinstall) for helping me save time for some scripts
+- Big thanks to [lspinstall](https://github.com/kabouzeid/nvim-lspinstall) which is the mother plugin of lspmanager.

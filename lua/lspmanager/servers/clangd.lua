@@ -3,13 +3,13 @@ local config = require("lspmanager.utilities").get_config(lsp_name)
 local installers = require("lspmanager.installers")
 local os = require("lspmanager.os")
 
-local cmd_exec = "./clangd/bin/clangd"
+local cmd_exec = "./bin/clangd"
 
 if os.get_os == os.OSes.Windows then
     cmd_exec = cmd_exec .. ".exe"
 end
 
-config.default_config.cmd[1] = cmd_exec
+config.cmd = {cmd_exec}
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then
@@ -32,14 +32,14 @@ local function install_script()
         Invoke-WebRequest -Uri $url -OutFile $out
         
         Add-Type -AssemblyName System.IO.Compression.FileSystem
-        [System.IO.Compression.ZipFile]::ExtractToDirectory($out, "clangd")
+        [System.IO.Compression.ZipFile]::ExtractToDirectory($out, ".")
         
         Remove-Item $out
         
         $cwd = Get-Location
         
         Set-Location -Path clangd\clangd_$version
-        Get-ChildItem -Recurse | Move-Item -Destination $cwd\clangd
+        Get-ChildItem -Recurse | Move-Item -Destination $cwd
         Set-Location -Path $cwd\clangd
         Remove-Item clangd_$version
 
@@ -67,19 +67,21 @@ local function install_script()
     esac
 
     curl -L -o "clangd.zip" "https://github.com/clangd/clangd/releases/download/$version/clangd-$platform-$version.zip"
-    unzip clangd.zip
+    unzip clangd.zip -d .
 
     rm clangd.zip
-    mv clangd_* clangd
+    mv clangd_*/* .
 
     echo $version > VERSION
     ]]
 end
 
-return vim.tbl_extend("error", config, {
+return {
+    config = config,
+
     install_script = install_script,
 
     update_script = function()
         return installers.manual.update_script("clangd/clangd")
     end,
-})
+}

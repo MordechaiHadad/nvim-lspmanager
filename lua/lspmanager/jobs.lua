@@ -1,6 +1,6 @@
 local jobs = {}
 
-local servers = require("lspmanager.servers")
+local servers = require("lspmanager.servers").get
 local os = require("lspmanager.os")
 
 function jobs.installation_job(lsp, path, is_update)
@@ -11,7 +11,7 @@ function jobs.installation_job(lsp, path, is_update)
         shell = "bash"
     end
 
-    vim.fn.jobstart({ shell, "-c", servers[lsp].install_script() }, {
+    vim.fn.jobstart({ shell, "-c", servers(lsp).install_script() }, {
         cwd = path,
         on_exit = function(_, exitcode)
             if is_update then
@@ -30,7 +30,7 @@ function jobs.installation_job(lsp, path, is_update)
 
                     vim.schedule(function()
                         if vim.api.nvim_buf_get_name(0) ~= "" then
-                            lspmanager.setup_servers(true, lsp)
+                            require("lspmanager").setup_servers(lsp)
                             vim.cmd("bufdo e")
                         end
                     end)
@@ -54,7 +54,7 @@ function jobs.update_job(lsp, path) -- NOTE: might add mass update if viable
         shell = "bash"
     end
 
-    vim.fn.jobstart({ shell, "-c", servers[lsp].update_script() }, {
+    vim.fn.jobstart({ shell, "-c", servers(lsp).update_script() }, {
         cwd = path,
         on_exit = function(_, exitcode)
             if exitcode == 69 then
