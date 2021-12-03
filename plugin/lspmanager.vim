@@ -30,7 +30,7 @@ endfunction
 command! -nargs=* -complete=custom,s:complete_available LspInstall :call lspmanager#install_server('<args>')
 command! -nargs=1 -complete=custom,s:complete_installed LspUninstall :call lspmanager#uninstall_server('<args>')
 command! -nargs=1 -complete=custom,s:complete_installed_for_update LspUpdate :call lspmanager#update_server('<args>')
-command! -nargs=0 LspInfoo :lua require("lspmanager.info").display()
+command! -nargs=0 LspInfo :lua require("lspmanager.info").display()
 
 function! s:complete_available(arg, line, pos) abort
   return join(lspmanager#available_servers(), "\n")
