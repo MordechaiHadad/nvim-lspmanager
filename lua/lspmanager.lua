@@ -166,7 +166,7 @@ lspmanager.update = function(lsp)
         return
     end
 
-    if not servers_list[lsp] then
+    if not vim.tbl_contains(servers_list, lsp) then
         error("Could not find LSP " .. lsp)
     end
 
