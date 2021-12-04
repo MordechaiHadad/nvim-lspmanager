@@ -1,18 +1,19 @@
 local lspmanager = {}
 
-local servers = require("lspmanager.servers").get()
+local servers_list = require("lspmanager.servers").get()
 local jobs = require("lspmanager.jobs")
 local get_path = require("lspmanager.utilities").get_path
-local enable_gdscript = nil
+local enable_gdscript = false
 
 lspmanager.setup = function(user_configs)
     user_configs = user_configs or {}
-    -- servers = require("lspmanager.servers").set(user_configs.lsps or {})
-
-	-- require("lspmanager.info.config").setup(user_configs.info or {})
+    servers = require("lspmanager.servers").set(user_configs.lsps or {})
+	require("lspmanager.info.config").setup(user_configs.info or {})
     enable_gdscript = user_configs.enable_gdscript or false
+
     lspmanager.setup_servers(nil)
     lspmanager.ensure_installed(user_configs.ensure_installed or {})
+
 end
 
 lspmanager.is_lsp_installed = function(lsp)
@@ -20,13 +21,13 @@ lspmanager.is_lsp_installed = function(lsp)
 end
 
 lspmanager.available_servers = function()
-    return vim.tbl_values(servers)
+    return vim.tbl_values(servers_list)
 end
 
 lspmanager.suggested_servers = function(filetype)
     local available = lspmanager.available_servers()
     local available_for_filetype = {}
-    for _, lsp_name in pairs(servers) do
+    for _, lsp_name in pairs(servers_list) do
         local config = require("lspmanager.utilities").get_config(lsp_name)
         if vim.tbl_contains(available, lsp_name) then
             if vim.tbl_contains(config.document_config.default_config.filetypes, filetype) then
@@ -59,7 +60,7 @@ lspmanager.setup_servers = function(lsp)
             require("lspconfig").gdscript.setup({})
         end
     else
-        local server = require("lspmanager.servers").get(lsp)
+        local server = servers[lsp] or require("lspmanager.servers").get(lsp)
         local config = server.config
         local path = get_path(lsp)
         if config.cmd then
@@ -122,7 +123,7 @@ lspmanager.install = function(lsp)
         return
     end
 
-    if not vim.tbl_contains(servers, lsp) then
+    if not vim.tbl_contains(servers_list, lsp) then
         error("could not find LSP " .. lsp)
     end
 
@@ -141,7 +142,7 @@ lspmanager.install = function(lsp)
 end
 
 lspmanager.uninstall = function(lsp)
-    if not servers[lsp] then
+    if not vim.tbl_contains(servers_list, lsp) then
         error("could not find LSP " .. lsp)
     end
 
@@ -166,7 +167,7 @@ lspmanager.update = function(lsp)
         return
     end
 
-    if not servers[lsp] then
+    if not servers_list[lsp] then
         error("Could not find LSP " .. lsp)
     end
 
@@ -185,7 +186,7 @@ lspmanager.ensure_installed = function(ensure_installed)
     if #ensure_installed > 0 then
         for _, server in ipairs(ensure_installed) do
 
-            if not servers[server] then
+            if not servers_list[server] then
                 goto skip
             end
 
