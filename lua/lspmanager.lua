@@ -13,7 +13,6 @@ lspmanager.setup = function(user_configs)
 
     lspmanager.setup_servers(nil)
     lspmanager.ensure_installed(user_configs.ensure_installed or {})
-
 end
 
 lspmanager.is_lsp_installed = function(lsp)

@@ -45,10 +45,7 @@ return {
         for name, configuration in pairs(user_configs) do
             local server = require("lspmanager.servers." .. name)
             server = vim.tbl_deep_extend("force", server, {
-                config = {
-                    cmd = configuration.cmd or server.config.cmd,
-                    document_config = { default_config = configuration }
-                },
+                config = configuration,
             })
             new_servers[name] = server
         end
