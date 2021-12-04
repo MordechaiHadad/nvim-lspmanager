@@ -1,5 +1,5 @@
 local lsp_name = "rust_analyzer"
-local config = require("lspmanager.utilities").get_config(lsp_name)
+local config = require("lspmanager.utilities").get_config(lsp_name).document_config.default_config
 local os = require("lspmanager.os")
 local path = require("lspmanager.utilities").get_path(lsp_name)
 
@@ -9,7 +9,7 @@ if os.get_os() == os.OSes.Windows then
     cmd_exec = cmd_exec .. ".exe"
 end
 
-config.cmd = {cmd_exec}
+config.cmd[1] = cmd_exec
 
 local function install_script()
     if os.get_os() == os.OSes.Windows then

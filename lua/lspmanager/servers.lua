@@ -41,14 +41,17 @@ return {
     set = function(user_configs)
         vim.validate({ user_configs = { user_configs, "table" } })
 
+        local new_servers = {}
         for name, configuration in pairs(user_configs) do
-            servers[name] = vim.tbl_deep_extend("force", servers[name], {
+            local server = require("lspmanager.servers." .. name)
+            server = vim.tbl_deep_extend("force", server, {
                 config = {
-                    default_config = configuration,
+                    cmd = configuration.cmd or server.config.cmd,
+                    document_config = { default_config = configuration }
                 },
             })
+            new_servers[name] = server
         end
-
-        return servers
+        return new_servers
     end,
 }
