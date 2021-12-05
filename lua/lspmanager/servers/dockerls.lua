@@ -1,5 +1,5 @@
 local lsp_name = "dockerls"
-local config = require("lspmanager.utilities").get_config(lsp_name)
+local config = require("lspmanager.utilities").get_config(lsp_name).document_config.default_config
 local installers = require("lspmanager.installers")
 local os = require("lspmanager.os")
 

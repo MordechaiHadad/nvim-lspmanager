@@ -1,5 +1,5 @@
 local lsp_name = "solang"
-local config = require("lspmanager.utilities").get_config(lsp_name)
+local config = require("lspmanager.utilities").get_config(lsp_name).document_config.default_config
 local os = require("lspmanager.os")
 
 local cmd_exec = "./solang"
