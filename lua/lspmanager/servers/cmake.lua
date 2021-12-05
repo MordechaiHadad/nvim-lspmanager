@@ -1,5 +1,5 @@
 local lsp_name = "cmake"
-local config = require("lspmanager.utilities").get_config(lsp_name)
+local config = require("lspmanager.utilities").get_config(lsp_name).document_config.default_config
 local pip = require("lspmanager.installers.pip")
 local os = require("lspmanager.os")
 
