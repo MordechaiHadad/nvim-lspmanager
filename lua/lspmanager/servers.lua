@@ -12,6 +12,7 @@ local servers = {
     "fsautocomplete",
     "hls",
     "html",
+    "jsonnet",
     "jsonls",
     "kotlin_language_server",
     "omnisharp",

@@ -150,6 +150,7 @@ require("lspmanager").setup({
 | :white_check_mark: | FSharp                                         | `fsautocomplete`    |
 | :white_check_mark: | Haskell                                        | `hls`               |
 | :white_check_mark: | HTML                                           | `html`              |
+| :white_check_mark: | Jsonnet                                        | `jsonnet`           |
 | :white_check_mark: | JSON                                           | `jsonls`            |
 | :white_check_mark: | Kotlin                                         | `kotlinls`          |
 | :white_check_mark: | CSharp                                         | `omnisharp`         |
